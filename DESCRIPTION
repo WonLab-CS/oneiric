@@ -1,4 +1,4 @@
-Package:  vesalius
+Package:  oneiric
 Type: Package
 Title: oneiric - simualting spatial data 
 Version: 0.0.1
@@ -7,20 +7,22 @@ Maintainer: Patrick C.N. Martin <patrick.martin@cshs.org>
 Description: Creating simulated data sets for benchmarking spatial mapping tools
 License: GPL-3 + file LICENSE
 Collate: simulate.R
+  circular_map.R
+  rod_map.R
+  chaos_maps.R
+  utils.R
 Depends: R (>= 4.0.0)
 Imports:
-    grDevices,
-    ggplot2,
-    dplyr
-    vesalius
+  grDevices,
+  ggplot2,
+  dplyr,
+  vesalius
 Suggests:
-    knitr,
-    RUnit,
-    rmarkdown,
-    testthat (>= 3.0.0)
+  knitr,
+  RUnit,
+  rmarkdown,
+  testthat (>= 3.0.0)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
-URL: https://patrickcnmartin.github.io/Vesalius/,https://github.com/patrickCNMartin/Vesalius
-Config/testthat/edition: 3
