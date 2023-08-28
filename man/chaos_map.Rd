@@ -4,7 +4,7 @@
 \alias{chaos_map}
 \title{Create chaotic territoies}
 \usage{
-chaos_map(n_cells = 6000, max_expanse = 0.1, layers = 0, chaos = "tinkerbell")
+chaos_map(n_cells = 6000, max_expanse = 0.1, chaos = "tinkerbell", layers = 0)
 }
 \arguments{
 \item{n_cells}{int - number of cells to create}
@@ -12,9 +12,9 @@ chaos_map(n_cells = 6000, max_expanse = 0.1, layers = 0, chaos = "tinkerbell")
 \item{max_expanse}{numeric -  max proportion of total width to use for
 territory expansion.}
 
-\item{layers}{int - number of layers in each rod territory}
-
 \item{chaos}{character - string specifying which chaos map to use}
+
+\item{layers}{int - number of layers in each rod territory}
 }
 \value{
 coordinate data frame with barcodes, x, y, and Territories

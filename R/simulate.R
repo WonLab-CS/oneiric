@@ -28,28 +28,27 @@ simulate_spatial <- function(n_cells = 6000,
     n_samples = 10,
     pattern = "circle",
     layers = 0,
-    max_expanse = 0.1,
-    max_width = 0.1,
+    max_expanse = 0.3,
+    max_width = 0.3,
     max_length = 0.5,
     out_dir = NULL,
     border = TRUE) {
 
     if (pattern == "chaos"){
-        choas <- sample(c("tinkerbell"), n_samples, replace = TRUE)
+        chaos <- sample(c("tinkerbell", "bogdanov"), n_samples, replace = TRUE)
     }
-    if (is.null(out_dir)){
-        sample_coord <- vector("list", n_samples)
-        for (i in seq_along(samples)) {
-            sample_coord[[i]] <- switch(pattern,
-                "circle" = circular_map(n_cells, n_territories, max_expanse, layers),
-                "rod" = rod_map(n_cells, n_territories, max_width, max_length, layers),
-                "chaos" = chaos_map(n_cells, max_expanse, layers, chaos))
-        }
+    sample_coord <- vector("list", n_samples)
+    for (i in seq_len(n_samples)) {
+        tmp <- switch(pattern,
+            "circle" = circular_map(n_cells, n_territories, max_expanse, layers),
+            "rod" = rod_map(n_cells, n_territories, max_width, max_length, layers),
+            "chaos" = chaos_map(n_cells, max_expanse, chaos[i], layers))
+        tmp$sample <- i
+        sample_coord[[i]] <- tmp
     }
+    
 
     return(sample_coord)
-
-
 }
 
 #' @export 

@@ -12,8 +12,8 @@ simulate_spatial(
   n_samples = 10,
   pattern = "circle",
   layers = 0,
-  max_expanse = 0.1,
-  max_width = 0.1,
+  max_expanse = 0.3,
+  max_width = 0.3,
   max_length = 0.5,
   out_dir = NULL,
   border = TRUE

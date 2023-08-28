@@ -11,9 +11,9 @@
 #' @importFrom vesalius build_vesalius_assay generate_tiles territory_morphing layer_territory
 rod_map <- function(n_cells = 6000,
     n_territories = 5,
-    layers = 0,
     max_width = 0.05,
-    max_length = 0.5) {
+    max_length = 0.5,
+    layers = 0) {
     #-------------------------------------------------------------------------#
     # Make rods
     #-------------------------------------------------------------------------#
