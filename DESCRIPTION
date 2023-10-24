@@ -11,6 +11,7 @@ Collate: simulate.R
   rod_map.R
   chaos_maps.R
   utils.R
+  data.R
 Depends: R (>= 4.0.0)
 Imports:
   grDevices,

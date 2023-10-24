@@ -6,8 +6,6 @@
 \usage{
 simulate_spatial(
   n_cells = 6000,
-  n_types = 10,
-  n_genes = 2000,
   n_territories = 5,
   n_samples = 10,
   pattern = "circle",
@@ -21,10 +19,6 @@ simulate_spatial(
 }
 \arguments{
 \item{n_cells}{int - number of cells to include in siluated data}
-
-\item{n_types}{int - number of different cells types}
-
-\item{n_genes}{int - number of genes to include in the count matrix}
 
 \item{n_territories}{int - number of territories to create}
 

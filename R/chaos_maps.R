@@ -24,8 +24,7 @@ chaos_map <- function(n_cells = 6000,
     barcodes <- paste0("cell_", seq(1, n_cells))
     coord <- data.frame(barcodes, x, y, "Territory" = 0)
     coord <- switch(chaos,
-        "tinkerbell" = tinkerbell_map(coord),
-        "bogdanov" = bogdanov_map(coord))
+        "tinkerbell" = tinkerbell_map(coord))
     
     #-------------------------------------------------------------------------#
     # We will use vesalius if there is a need for layers
@@ -71,7 +70,15 @@ chaos_map <- function(n_cells = 6000,
 
 #' @importFrom RANN nn2
 tinkerbell_map <- function(coord, chaos = FALSE) {
-    tinker <- tinkerbell(time = 8000)
+    data(oneiric)
+    params <- map_params[sample(seq(1,nrow(map_params)),1), ]
+    tinker <- tinkerbell(time = 8000,
+        a = params[1],
+        b = params[2],
+        c = params[3],
+        d = params[4],
+        x_0 = params[5],
+        y_0 = params[6])
     tinker$x <- min_max(tinker$x) * max(coord$x)
     tinker$y <- min_max(tinker$y) * max(coord$y)
     knn <- RANN::nn2(coord[, c("x", "y")],
@@ -98,74 +105,53 @@ tinkerbell <- function(time = 8000,
     return(data.frame(x, y))
 }
 
-bogdanov_map <- function(coord, chaos = FALSE) {
-    bog <- bogdanov(time = 8000)
-    browser()
-    bog$x <- min_max(bog$x) * max(coord$x)
-    bog$y <- min_max(bog$y) * max(coord$y)
-    knn <- RANN::nn2(coord[, c("x", "y")],
-        bog,
-        k = 1)$nn.idx[, 1]
-    coord$Territory[knn] <- 1
-    return(coord)
-}
+#' @export
+find_tinkerbell <- function(time = 120,
+    n_maps = 96,
+    plot = FALSE,
+    export = FALSE,
+    file_name = "maps") {
+    p <- 1
+    maps <- vector("list", 96)
+    start <- Sys.time()
 
-bogdanov <- function(time,
-    e = 0,
-    k = 1.2,
-    m = 0){
-    # Initial start might not be optimal here 
-    x <- rep(0.3, length(time))
-    y <- rep(0.3, length(time))
-    for (i in seq(1, time - 1)){
-        y[i + 1] <- y[i] + e * y[i] + k * x[i] * (x[i] - 1) + m * x[i] * y[i]
-        x[i + 1] <- x[i] + y[i + 1]
+    if(plot) {
+        file <- paste0(file_name, ".pdf")
+        pdf(file, width = 20, height = 20)
+        par(mfrow = c(4, 4))
     }
-    return(data.frame(x, y))
-}
+    while(p <= n_maps){
+        if(as.numeric(difftime(Sys.time(), start, units = "secs")) >= time) {
+            break
+        }
+        a <- runif(1, -5, 5)
+        b <- runif(1, -5, 5)
+        c <- runif(1, -5, 5)
+        d <- runif(1, -5, 5)
+        x_0 <- runif(1, -5, 5)
+        y_0 <- runif(1, -5, 5)
+        tinker <- oneiric:::tinkerbell(time = 6000,
+            a = a,b=b,c=c,d=d,x_0=x_0,y_0=y_0)
+        if (any(is.na(tinker$x)) || any(is.na(tinker$y))) {
+            next
+        }
 
-
-# Bogdanov map function in R
-dimx <- 1024    # Image dimension
-dimy <- 1024
-
-I <- integer(dimx * dimy)
-for (i in 1:(dimx * dimy)) I[i] <- 0
-
-e <- 0          # birth and grow
-k <- 1.2        # Discretization
-m <- 0          # stability
-step <- 0.03    # Initial point step
-
-for (oy in seq(-1.0, 1.0, by = step)) {
-  for (ox in seq(-0.7, 1.3, by = step)) {
-    if (ox == 0 || oy == 0) next     # Avoid origin
-    x <- ox
-    y <- oy
-    for (q in 1:100000) {
-      y <- y + e * y + k * x * (x - 1) + m * x * y
-      x <- x + y
-      if (abs(x) > 2 || abs(y) > 2) break    # the map diverges
-      imx <- (x - 0.3) * dimx / 2 + dimx / 2
-      imy <- y * dimy / 2 + dimy / 2
-      if (abs(x) > 1e-6 || abs(y) > 1e-6) {    # Avoid origin
-        ix <- as.integer(imx + 0.5)
-        iy <- as.integer(imy + 0.5)
-        if (ix >= 0 && ix < dimx && iy >= 0 && iy < dimy)
-          I[dimx * (dimy - 1 - iy) + ix + 1] <- I[dimx * (dimy - 1 - iy) + ix + 1] + 1
-      }
+        if (max(tinker$x) > 10 || max(tinker$y) > 10 || min(tinker$x) < (-10) || min(tinker$y) < (-10)){
+            next
+        }
+        maps[[p]] <- c(a,b,c,d,x_0,y_0)
+        names(maps[[p]]) <- c("a","b","c","d","x_0","y_0")
+        if (plot) {
+            plot(tinker$x,tinker$y,pch = 19, col = "cadetblue", main = paste("Sample p = ",p))
+        }
+        p <- p + 1
     }
-  }
+    if(plot) {dev.off()}
+    maps <- do.call("rbind", maps)
+    if(export){
+        file <- paste0(file_name, ".csv")
+        write.csv(maps, file = file, row.names = FALSE)
+    }
+    return(maps)
 }
 
-maxd <- max(I)    # Compute max frequency
-
-fo <- file("bogdanov_map.pgm", "wb")
-writeBin(charToRaw(paste("P5\n", dimx, " ", dimy, "\n255\n", sep = "")), fo)
-for (i in 1:(dimx * dimy)) {
-  v <- ifelse(I[i] == 0, 0, 32 + (256 - 32) * I[i] / maxd + 0.5)
-  v <- min(255, v)
-  b <- as.raw(255 - v)
-  writeBin(b, fo)
-}
-close(fo)
