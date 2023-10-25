@@ -23,12 +23,13 @@ simulate_spatial <- function(n_cells = 6000,
     n_territories = 5,
     n_samples = 10,
     pattern = "circle",
-    layers = 0,
     max_expanse = 0.3,
     max_width = 0.3,
     max_length = 0.5,
+    border = TRUE,
+    layers = 0,
     out_dir = NULL,
-    border = TRUE) {
+    file_tag = "file") {
 
     sample_coord <- vector("list", n_samples)
     for (i in seq_len(n_samples)) {
@@ -39,9 +40,15 @@ simulate_spatial <- function(n_cells = 6000,
         tmp$sample <- i
         sample_coord[[i]] <- tmp
     }
-    
-
-    return(sample_coord)
+    if (!is.null(out_dir)){
+        for (i in seq_along(sample_coord)) {
+            file_name <- paste0(out_dir, file, "_", i,".csv")
+            write.csv(sample_coord[[i]], file = file_name, row.names = FALSE)
+        }
+        return(NULL)
+    } else {
+        return(sample_coord)
+    }
 }
 
 #' @export 
@@ -52,6 +59,22 @@ simulate_cells <- function(n_cells = 6000,
     # creating gene list
     #-------------------------------------------------------------------------#
     genes <- paste0("gene_", seq(1, n_genes))
+    
+
+}
 
 
+simulate_datasets <- function(n_cells = 6000,
+    n_genes = 2000,
+    n_types = 10,
+    n_territories = 5,
+    n_samples = 10,
+    pattern = "circle",
+    layers = 0,
+    max_expanse = 0.3,
+    max_width = 0.3,
+    max_length = 0.5,
+    out_dir = NULL,
+    border = TRUE){
+    
 }

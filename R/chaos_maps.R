@@ -37,7 +37,7 @@ chaos_map <- function(n_cells = 6000,
         ves <- territory_morphing(ves,
             territory = ter_to_layer,
             trial = "Territory",
-            morphology_factor = max_expanse * 1000,
+            morphology_factor = max_expanse,
             verbose = FALSE)
         ves <- layer_territory(ves,
             territory = ter_to_layer,
@@ -57,7 +57,7 @@ chaos_map <- function(n_cells = 6000,
         ves <- territory_morphing(ves,
             territory = ter_to_layer,
             trial = "Territory",
-            morphology_factor = max_expanse * 1000,
+            morphology_factor = max_expanse,
             verbose = FALSE)
         coord <- ves@territories[, c("barcodes", "x", "y", "Morphology")]
         colnames(coord) <- gsub("Morphology", "Territory", colnames(coord))

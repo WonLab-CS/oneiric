@@ -41,7 +41,7 @@ sim_ter <- system.file("extdata", package = "oneiric")
 
 ## Simulate New Territories 
 
-```{r circle_sim, eval = TRUE, echo = TRUE}
+```{r spatial_sim, eval = TRUE, echo = TRUE}
 circles <- simulate_spatial(n_cells = 6000,
     n_territories = 5,
     n_samples = 12,
@@ -58,7 +58,7 @@ rods <- simulate_spatial(n_cells = 6000,
 chaos <- simulate_spatial(n_cells = 6000,
     n_samples = 12,
     pattern = "chaos",
-    max_expanse = 0)
+    max_expanse = 0.02)
 
 ```
 
