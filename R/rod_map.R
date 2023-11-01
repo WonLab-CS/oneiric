@@ -21,7 +21,7 @@ rod_map <- function(n_cells = 6000,
     max_length <- max_length * 1000
     x <- runif(n_cells, min = 1, max = 1000)
     y <- runif(n_cells, min = 1, max = 1000)
-    barcodes <- paste0("cell_", seq(1, n_cells))
+    barcodes <- paste0("Cell", seq(1, n_cells))
     coord <- data.frame(barcodes, x, y, "Territory" = 0)
     start <- sample(seq(1, n_cells), size = n_territories, replace = FALSE)
     distances <- lapply(start, rod_it, x, y, max_width, max_length)

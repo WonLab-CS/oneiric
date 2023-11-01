@@ -18,6 +18,7 @@ vignette: |
 
 ```{r setup, eval = TRUE, echo = TRUE}
 library(oneiric)
+library(scater)
 library(ggplot2)
 library(RColorBrewer)
 set.seed(288)
@@ -34,7 +35,16 @@ str(map_params)
 
 ## Simulated Territories
 ```{r sim_ter, eval = TRUE, echo = TRUE}
-sim_ter <- system.file("extdata", package = "oneiric")
+sim_ter <- paste0(system.file(package = "oneiric"), "/inst/extdata/")
+dir(sim_ter)
+```
+
+## Preparing output directory
+```{r out_dir, eval = TRUE, echo = TRUE}
+if (!dir.exists("output/")) {
+    output <- dir.create("output/")
+}
+output <- "output/"
 ```
 
 # Creating New Data sets
@@ -42,20 +52,20 @@ sim_ter <- system.file("extdata", package = "oneiric")
 ## Simulate New Territories 
 
 ```{r spatial_sim, eval = TRUE, echo = TRUE}
-circles <- simulate_spatial(n_cells = 6000,
+circle <- simulate_spatial(n_cells = 6000,
     n_territories = 5,
     n_samples = 12,
     pattern = "circle",
     max_expanse = 0.3)
 
-rods <- simulate_spatial(n_cells = 6000,
+rod <- simulate_spatial(n_cells = 6000,
     n_territories = 5,
     n_samples = 12,
     pattern = "rod",
     max_width = 0.1,
     max_length = 0.5)
 
-chaos <- simulate_spatial(n_cells = 6000,
+chaos_map <- simulate_spatial(n_cells = 6000,
     n_samples = 12,
     pattern = "chaos",
     max_expanse = 0.02)
@@ -64,12 +74,12 @@ chaos <- simulate_spatial(n_cells = 6000,
 
 ### Circular Territories
 ```{r view_circles, eval = TRUE, echo = TRUE, fig.width = 9, fig.height=9, fig.cap = "Circular Territories"}
-circles <- do.call("rbind", circles)
+circles <- do.call("rbind", circle)
 circles$Territory <- as.factor(circles$Territory)
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
     theme_bw() +
-    scale_color_brewer(palette="Spectral") +
+    scale_color_brewer(palette = "Spectral") +
     facet_wrap(~sample) +
     guides(colour = guide_legend(
         override.aes = list(size =  5)))
@@ -78,13 +88,13 @@ print(g)
 
 ### Rod Territories
 ```{r view_rod, eval = TRUE, echo = TRUE, fig.width = 9, fig.height=9, fig.cap = "Rod Territories"}
-rods <- do.call("rbind", rods)
+rods <- do.call("rbind", rod)
 rods$Territory <- as.factor(rods$Territory)
 g <- ggplot(rods, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
     theme_bw() +
-    scale_color_brewer(palette="Spectral") +
-    facet_wrap(~sample)+
+    scale_color_brewer(palette = "Spectral") +
+    facet_wrap(~sample) +
     guides(colour = guide_legend(
         override.aes = list(size =  5)))
 print(g)
@@ -92,14 +102,49 @@ print(g)
 
 ### Tinkerbell Map Territories
 ```{r view_chaos, eval = TRUE, echo = TRUE,fig.width = 9, fig.height=9, fig.cap = "Tinkerbell Map Territories"}
-chaos <- do.call("rbind", chaos)
+chaos <- do.call("rbind", chaos_map)
 chaos$Territory <- as.factor(chaos$Territory)
 g <- ggplot(chaos, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
     theme_bw() +
-    scale_color_brewer(palette="Spectral") +
-    facet_wrap(~sample)+
+    scale_color_brewer(palette = "Spectral") +
+    facet_wrap(~sample) +
     guides(colour = guide_legend(
         override.aes = list(size =  5)))
 print(g)
+```
+
+## Simulate New Cells
+
+```{r counts, eval = TRUE, echo = TRUE}
+circle_counts <- simulate_cells(circle,
+    cell_composition = 2,
+    n_genes = 2000,
+    seed = 1729)
+
+rod_counts <- simulate_cells(rod,
+    cell_composition = 2,
+    n_genes = 2000,
+    seed = 1729)
+
+chaos_counts <- simulate_cells(chaos_map,
+    cell_composition = 2,
+    n_genes = 2000,
+    seed = 1729)
+```
+
+## Export Data sets
+```{r export, eval = FALSE, echo = TRUE}
+export_simulation(spatial = circle,
+    cells = circle_counts,
+    out_dir = output,
+    file_tag = "circle_spatial_territories")
+export_simulation(spatial = rod,
+    cells = rod_counts,
+    out_dir = output,
+    file_tag = "circle_spatial_territories")
+export_simulation(spatial = choas_map,
+    cells = chaos_counts,
+    out_dir = output,
+    file_tag = "circle_spatial_territories")
 ```

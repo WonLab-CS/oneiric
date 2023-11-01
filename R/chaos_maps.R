@@ -21,7 +21,7 @@ chaos_map <- function(n_cells = 6000,
     max_expanse <- max_expanse * 1000
     x <- runif(n_cells, min = 1, max = 1000)
     y <- runif(n_cells, min = 1, max = 1000)
-    barcodes <- paste0("cell_", seq(1, n_cells))
+    barcodes <- paste0("Cell", seq(1, n_cells))
     coord <- data.frame(barcodes, x, y, "Territory" = 0)
     coord <- switch(chaos,
         "tinkerbell" = tinkerbell_map(coord))

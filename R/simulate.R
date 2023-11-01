@@ -15,8 +15,6 @@
 #' max size (1000 "pixels")
 #' @param max_length numeric - max length of rod territories as a proportion of
 #' max size (1000 "pixels")
-#' @param out_dir character - path to output directory. If null, will return list
-#' of samples
 #' @param border logical - should border cells have specific gene expression?
 #' @export 
 simulate_spatial <- function(n_cells = 6000,
@@ -27,54 +25,42 @@ simulate_spatial <- function(n_cells = 6000,
     max_width = 0.3,
     max_length = 0.5,
     border = TRUE,
-    layers = 0,
-    out_dir = NULL,
-    file_tag = "file") {
+    layers = 0) {
 
     sample_coord <- vector("list", n_samples)
     for (i in seq_len(n_samples)) {
-        tmp <- switch(pattern,
+        tmp_coord <- switch(pattern,
             "circle" = circular_map(n_cells, n_territories, max_expanse, layers),
             "rod" = rod_map(n_cells, n_territories, max_width, max_length, layers),
             "chaos" = chaos_map(n_cells, max_expanse, "tinkerbell", layers))
-        tmp$sample <- i
-        sample_coord[[i]] <- tmp
+        tmp_coord$sample <- i
+        sample_coord[[i]] <- tmp_coord
     }
-    if (!is.null(out_dir)){
-        for (i in seq_along(sample_coord)) {
-            file_name <- paste0(out_dir, file, "_", i,".csv")
-            write.csv(sample_coord[[i]], file = file_name, row.names = FALSE)
-        }
-        return(NULL)
-    } else {
-        return(sample_coord)
-    }
+    return(sample_coord)
 }
 
+#' @importFrom splatter newSplatParams setParams splatSimulateGroups
 #' @export 
-simulate_cells <- function(n_cells = 6000,
+simulate_cells <- function(spatial,
+    cell_composition = 1,
     n_genes = 2000,
-    n_types = 10) {
-    #-------------------------------------------------------------------------#
-    # creating gene list
-    #-------------------------------------------------------------------------#
-    genes <- paste0("gene_", seq(1, n_genes))
-    
-
-}
-
-
-simulate_datasets <- function(n_cells = 6000,
-    n_genes = 2000,
-    n_types = 10,
-    n_territories = 5,
-    n_samples = 10,
-    pattern = "circle",
-    layers = 0,
-    max_expanse = 0.3,
-    max_width = 0.3,
-    max_length = 0.5,
-    out_dir = NULL,
-    border = TRUE){
-    
+    seed = 1729) {
+    if (!is(spatial,"list")){
+        spatial <- list(spatial)
+    }
+    spatial <- lapply(spatial, function(spatial,cell_composition,n_genes,seed){
+        n_ters <- table(spatial$Territory)
+        n_cells <- unlist(lapply(n_ters, function(cell, cell_comp){
+                return(rep(ceiling(cell / cell_comp), times = cell_comp))
+        }, cell_composition))
+        cell_types <- make.unique(rep(names(n_ters), each = cell_composition))
+        params <- newSplatParams(batchCells = nrow(spatial), nGenes = n_genes)
+        params <- setParam(params, "seed", seed)
+        sim <- splatSimulateGroups(params, group.prob = n_cells / sum(n_cells), verbose = FALSE)
+        sim <- counts(sim)
+        return(sim)
+    }, cell_composition = cell_composition,
+    n_genes = n_genes,
+    seed = seed)
+    return(spatial)
 }

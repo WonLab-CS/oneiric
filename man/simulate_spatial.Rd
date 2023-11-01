@@ -9,12 +9,11 @@ simulate_spatial(
   n_territories = 5,
   n_samples = 10,
   pattern = "circle",
-  layers = 0,
   max_expanse = 0.3,
   max_width = 0.3,
   max_length = 0.5,
-  out_dir = NULL,
-  border = TRUE
+  border = TRUE,
+  layers = 0
 )
 }
 \arguments{
@@ -27,8 +26,6 @@ simulate_spatial(
 \item{pattern}{character - string defining the type of territories to 
 generate ("circle", "rod", "chaos")}
 
-\item{layers}{int - number of layers in a territory}
-
 \item{max_expanse}{numeric - expansion proportion for circular and chaotic
 territories as a proportion of max size (1000 "pixels")}
 
@@ -38,10 +35,9 @@ max size (1000 "pixels")}
 \item{max_length}{numeric - max length of rod territories as a proportion of
 max size (1000 "pixels")}
 
-\item{out_dir}{character - path to output directory. If null, will return list
-of samples}
-
 \item{border}{logical - should border cells have specific gene expression?}
+
+\item{layers}{int - number of layers in a territory}
 }
 \description{
 Create spatial territories
