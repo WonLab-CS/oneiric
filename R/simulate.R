@@ -21,18 +21,18 @@ simulate_spatial <- function(n_cells = 6000,
     n_territories = 5,
     n_samples = 10,
     pattern = "circle",
-    max_expanse = 0.3,
-    max_width = 0.3,
-    max_length = 0.5,
+    expanse = c(0.01, 0.5),
+    width_range = c(0, 0.3),
+    length_range = c(0.1,0.5),
     border = TRUE,
     layers = 0) {
 
     sample_coord <- vector("list", n_samples)
     for (i in seq_len(n_samples)) {
         tmp_coord <- switch(pattern,
-            "circle" = circular_map(n_cells, n_territories, max_expanse, layers),
-            "rod" = rod_map(n_cells, n_territories, max_width, max_length, layers),
-            "chaos" = chaos_map(n_cells, max_expanse, "tinkerbell", layers))
+            "circle" = circular_map(n_cells, n_territories, expanse, layers),
+            "rod" = rod_map(n_cells, n_territories, width_range, length_range, layers),
+            "chaos" = chaos_map(n_cells, expanse, "tinkerbell", layers))
         tmp_coord$sample <- i
         sample_coord[[i]] <- tmp_coord
     }
@@ -44,23 +44,48 @@ simulate_spatial <- function(n_cells = 6000,
 simulate_cells <- function(spatial,
     cell_composition = 1,
     n_genes = 2000,
+    as_layer = FALSE,
     seed = 1729) {
     if (!is(spatial,"list")){
         spatial <- list(spatial)
     }
-    spatial <- lapply(spatial, function(spatial,cell_composition,n_genes,seed){
-        n_ters <- table(spatial$Territory)
-        n_cells <- unlist(lapply(n_ters, function(cell, cell_comp){
-                return(rep(ceiling(cell / cell_comp), times = cell_comp))
-        }, cell_composition))
-        cell_types <- make.unique(rep(names(n_ters), each = cell_composition))
-        params <- newSplatParams(batchCells = nrow(spatial), nGenes = n_genes)
-        params <- setParam(params, "seed", seed)
-        sim <- splatSimulateGroups(params, group.prob = n_cells / sum(n_cells), verbose = FALSE)
-        sim <- counts(sim)
-        return(sim)
-    }, cell_composition = cell_composition,
-    n_genes = n_genes,
-    seed = seed)
-    return(spatial)
+    
+    spatial <- do.call("rbind", spatial)
+    spatial$barcodes <- paste0(spatial$barcodes, "_",spatial$sample)
+    ters <- sort(unique(spatial$Territory))
+    total_cells <- nrow(spatial)
+    for (i in seq_along(ters)){
+        bars <- spatial$barcodes[spatial$Territory == ters[i]]
+        split_size <- ceiling(length(bars) / cell_composition)
+        split_names <- make.unique(as.character(rep(ters[i], times = cell_composition)))
+        for (j in seq_len(cell_composition)){
+            samp <- sample(bars, size = min(c(split_size,length(bars))))
+            spatial$Territory[spatial$barcodes %in% samp] <-
+                split_names[j]
+            bars <- bars[!bars %in% samp]
+        }
+    }
+
+    n_cells <- table(spatial$Territory)
+    spatial$barcodes <- sapply(strsplit(spatial$barcodes,"_"), "[[", 1)
+    spatial <- split(spatial, spatial$sample)
+    params <- splatter::newSplatParams(batchCells = total_cells, nGenes = n_genes)
+    params <- splatter::setParam(params, "seed", seed)
+    if (as_layer) {
+        de <- c(0.1, rep(0.01, times = length(grep("_", names(n_cells)))))
+    } else {
+        de <- rep(0.1, times = length(n_cells))
+    }
+    sim <- splatter::splatSimulateGroups(params,
+        group.prob = as.numeric(n_cells / sum(n_cells)),
+        de.prob = de,
+        verbose = FALSE)
+    
+    counts <- lapply(spatial, function(spa, sim_counts) {
+        spa <- convert_names(spa, sim_counts)
+        cells <- get_cells(spa, sim_counts)
+        return(cells)
+    }, sim_counts = sim)
+    return(counts)
 }
+

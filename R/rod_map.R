@@ -11,20 +11,26 @@
 #' @importFrom vesalius build_vesalius_assay generate_tiles territory_morphing layer_territory
 rod_map <- function(n_cells = 6000,
     n_territories = 5,
-    max_width = 0.05,
-    max_length = 0.5,
+    width_range = c(0.0, 0.05),
+    length_range = c(0.1, 0.5),
     layers = 0) {
+    if (length(width_range) != 2){
+        stop("width_range requires a min width and max width!")
+    }
+    if (length(length_range) != 2){
+        stop("length_range requires a min width and max width!")
+    }
     #-------------------------------------------------------------------------#
     # Make rods
     #-------------------------------------------------------------------------#
-    max_width <- max_width * 1000
-    max_length <- max_length * 1000
+    width_range <- width_range * 1000
+    length_range <- length_range * 1000
     x <- runif(n_cells, min = 1, max = 1000)
     y <- runif(n_cells, min = 1, max = 1000)
     barcodes <- paste0("Cell", seq(1, n_cells))
     coord <- data.frame(barcodes, x, y, "Territory" = 0)
     start <- sample(seq(1, n_cells), size = n_territories, replace = FALSE)
-    distances <- lapply(start, rod_it, x, y, max_width, max_length)
+    distances <- lapply(start, rod_it, x, y, width_range, length_range)
     for (i in seq_along(distances)) {
         coord$Territory[distances[[i]]] <- i
     }
@@ -53,16 +59,16 @@ rod_map <- function(n_cells = 6000,
     
 }
 
-rod_it <- function(idx, x, y, max_width, max_length) {
+rod_it <- function(idx, x, y, width_range, length_range) {
     d_start <- sqrt(((x - x[idx])^2 + (y - y[idx])^2))
-    max_length <- runif(1, min = min(d_start), max_length)
+    max_length <- runif(1, min = length_range[1], length_range[2])
     d_end <- sample(which(d_start <= max_length), size = 1)
     x_0 <- x[idx]
     y_0 <- y[idx]
     x_1 <- x[d_end]
     y_1 <- y[d_end]
     d <- dist_line(x_0, y_0, x_1, y_1, x, y)
-    return(d <= max_width)
+    return(d >= width_range[1] & d <= width_range[2])
 }
 
 

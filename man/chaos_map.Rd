@@ -4,12 +4,12 @@
 \alias{chaos_map}
 \title{Create chaotic territoies}
 \usage{
-chaos_map(n_cells = 6000, max_expanse = 0.1, chaos = "tinkerbell", layers = 0)
+chaos_map(n_cells = 6000, expanse = 0.1, chaos = "tinkerbell", layers = 0)
 }
 \arguments{
 \item{n_cells}{int - number of cells to create}
 
-\item{max_expanse}{numeric -  max proportion of total width to use for
+\item{expanse}{numeric -  max proportion of total width to use for
 territory expansion.}
 
 \item{chaos}{character - string specifying which chaos map to use}

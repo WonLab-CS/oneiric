@@ -1,7 +1,7 @@
 
 #' Create chaotic territoies
 #' @param n_cells int - number of cells to create
-#' @param max_expanse numeric -  max proportion of total width to use for
+#' @param expanse numeric -  max proportion of total width to use for
 #' territory expansion.
 #' @param layers int - number of layers in each rod territory
 #' @param chaos character - string specifying which chaos map to use
@@ -12,13 +12,13 @@
 #' @importFrom dplyr %>%
 #' @importFrom vesalius build_vesalius_assay generate_tiles territory_morphing layer_territory
 chaos_map <- function(n_cells = 6000,
-    max_expanse = 0.1,
+    expanse = 0.1,
     chaos = "tinkerbell",
     layers = 0) {
     #-------------------------------------------------------------------------#
     # Make rods
     #-------------------------------------------------------------------------#
-    max_expanse <- max_expanse * 1000
+    expanse <- expanse[1] * 1000
     x <- runif(n_cells, min = 1, max = 1000)
     y <- runif(n_cells, min = 1, max = 1000)
     barcodes <- paste0("Cell", seq(1, n_cells))
@@ -29,7 +29,7 @@ chaos_map <- function(n_cells = 6000,
     #-------------------------------------------------------------------------#
     # We will use vesalius if there is a need for layers
     #-------------------------------------------------------------------------#
-    if ( max_expanse > 0 && layers > 0) {
+    if ( expanse > 0 && layers > 0) {
         ves <- build_vesalius_assay(coordinates = coord, verbose = FALSE) %>%
             generate_tiles(filter_grid = 1, filter_threshold = 1, verbose = FALSE)
         ves@territories <- coord
@@ -37,7 +37,7 @@ chaos_map <- function(n_cells = 6000,
         ves <- territory_morphing(ves,
             territory = ter_to_layer,
             trial = "Territory",
-            morphology_factor = max_expanse,
+            morphology_factor = expanse,
             verbose = FALSE)
         ves <- layer_territory(ves,
             territory = ter_to_layer,
@@ -49,7 +49,7 @@ chaos_map <- function(n_cells = 6000,
                     ves@territories[coord$Territory ==
                     ter_to_layer, "Layer"])
         return(coord)
-    } else if (max_expanse > 0 && layers == 0) {
+    } else if (expanse > 0 && layers == 0) {
         ves <- build_vesalius_assay(coordinates = coord, verbose = FALSE) %>%
             generate_tiles(filter_grid = 1, filter_threshold = 1, verbose = FALSE)
         ves@territories <- coord
@@ -57,7 +57,7 @@ chaos_map <- function(n_cells = 6000,
         ves <- territory_morphing(ves,
             territory = ter_to_layer,
             trial = "Territory",
-            morphology_factor = max_expanse,
+            morphology_factor = expanse,
             verbose = FALSE)
         coord <- ves@territories[, c("barcodes", "x", "y", "Morphology")]
         colnames(coord) <- gsub("Morphology", "Territory", colnames(coord))

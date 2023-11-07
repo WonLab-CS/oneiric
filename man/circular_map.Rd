@@ -4,14 +4,19 @@
 \alias{circular_map}
 \title{Create circular  territoies}
 \usage{
-circular_map(n_cells = 6000, n_territories = 5, max_expanse = 0.5, layers = 0)
+circular_map(
+  n_cells = 6000,
+  n_territories = 5,
+  expanse = c(0.01, 0.5),
+  layers = 0
+)
 }
 \arguments{
 \item{n_cells}{int - number of cells to create}
 
 \item{n_territories}{int -  max number of territories to generate}
 
-\item{max_expanse}{numeric -  max proportion of total width to use as 
+\item{expanse}{numeric -  max proportion of total width to use as 
 circle radius}
 
 \item{layers}{int - number of layers in each rod territory}
