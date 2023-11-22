@@ -32,28 +32,29 @@ export_simulation <- function(spatial,
     return(NULL)
 }
 
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SingleCellExperiment counts
 
-convert_names <- function(spatial, sce) {
-    lvls <- levels(colData(sce)@listData$Group)
-    ter <- names(table(spatial$Territory))
-    ter_locs <- match(spatial$Territory, ter)
-    spatial$Territory <- lvls[ter_locs]
+assign_barcodes <- function(spatial, sim) {
+    territories <- sort(unique(spatial$Territory))
+    n_ters <- table(spatial$Territory)
+    cells <- levels(SummarizedExperiment::colData(sim)$Group)
+    spatial$cells <- NA
+    for (i in seq_along(cells)){
+        spatial$cells[spatial$Territory == territories[i]] <- 
+            sample(x = colData(sim)$Cell[colData(sim)$Group == cells[i]],
+                size = n_ters[i],
+                replace = TRUE)
+    }
     return(spatial)
 }
 
-#' @importFrom SummarizedExperiment colData
-get_cells <- function(spatial, sce) {
-    cell_types <- table(spatial$Territory)
-    barcodes <- c()
-    relocs <- c()
-    groups <- as.character(SummarizedExperiment::colData(sce)@listData$Group)
-    cells <- as.character(SummarizedExperiment::colData(sce)@listData$Cell)
-    for (i in seq_along(cell_types)) {
-        locs <- which(groups == names(cell_types)[i])
-        relocs <- c(relocs, spatial$barcodes[which(spatial$Territory == names(cell_types)[i])])
-        barcodes <- c(barcodes, sample(cells[locs], size = cell_types[i]))
-    }
-    counts <- counts(sce)[, barcodes]
-    colnames(counts) <- relocs
-    return(counts)
+retrieve_counts <- function(spatial, sim) {
+    spatial <- split(spatial, spatial$sample)
+    count <- lapply(spatial, function(spa, sim){
+            sim <- counts(sim)[, spa$cells]
+            colnames(sim) <- spa$barcodes
+            return(sim)
+    }, sim = sim)
+    return(count)
 }

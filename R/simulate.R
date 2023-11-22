@@ -68,24 +68,20 @@ simulate_cells <- function(spatial,
 
     n_cells <- table(spatial$Territory)
     spatial$barcodes <- sapply(strsplit(spatial$barcodes,"_"), "[[", 1)
-    spatial <- split(spatial, spatial$sample)
+    #spatial <- split(spatial, spatial$sample)
     params <- splatter::newSplatParams(batchCells = total_cells, nGenes = n_genes)
     params <- splatter::setParam(params, "seed", seed)
     if (as_layer) {
-        de <- c(0.1, rep(0.01, times = length(grep("_", names(n_cells)))))
+        de <- c(0.25, rep(0.05, times = length(grep("_", names(n_cells)))))
     } else {
-        de <- rep(0.1, times = length(n_cells))
+        de <- rep(0.25, times = length(n_cells))
     }
     sim <- splatter::splatSimulateGroups(params,
         group.prob = as.numeric(n_cells / sum(n_cells)),
         de.prob = de,
         verbose = FALSE)
-    
-    counts <- lapply(spatial, function(spa, sim_counts) {
-        spa <- convert_names(spa, sim_counts)
-        cells <- get_cells(spa, sim_counts)
-        return(cells)
-    }, sim_counts = sim)
+    spatial <- assign_barcodes(spatial, sim)
+    counts <- retrieve_counts(spatial, sim)
     return(counts)
 }
 

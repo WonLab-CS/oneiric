@@ -51,20 +51,20 @@ output <- "/Users/martinp4/Documents/Cedars/Oneiric/simulations/"
 ## Simulate New Territories 
 
 ```{r spatial_sim, eval = TRUE, echo = TRUE}
-circle <- simulate_spatial(n_cells = 6000,
+circle <- simulate_spatial(n_cells = 5000,
     n_territories = 5,
     n_samples = 12,
     pattern = "circle",
     expanse = c(0.01, 0.3))
 
-rod <- simulate_spatial(n_cells = 6000,
+rod <- simulate_spatial(n_cells = 5000,
     n_territories = 5,
     n_samples = 12,
     pattern = "rod",
     width_range = c(0.0, 0.1),
     length_range = c(0.2, 0.5))
 
-chaos_map <- simulate_spatial(n_cells = 6000,
+chaos_map <- simulate_spatial(n_cells = 5000,
     n_samples = 12,
     pattern = "chaos",
     expanse = 0.02)
@@ -117,7 +117,7 @@ print(g)
 
 ```{r counts, eval = TRUE, echo = TRUE}
 circle_counts <- simulate_cells(circle,
-    cell_composition = 2,
+    cell_composition = 1,
     n_genes = 2000,
     seed = 1729)
 
@@ -150,7 +150,7 @@ export_simulation(spatial = chaos_map,
 
 ## Simulating Layered Territories 
 ```{r circle_layer, eval = TRUE, echo = TRUE}
-circular_layer <- simulate_spatial(n_cells = 6000,
+circular_layer <- simulate_spatial(n_cells = 5000,
     n_territories = 1,
     n_samples = 12,
     pattern = "circle",
@@ -174,6 +174,6 @@ print(g)
 export_simulation(spatial = circular_layer,
     cells = circular_layer_counts,
     out_dir = output,
-    file_tag = "layered_circle_spatial_territories")
+    file_tag = "layered_spatial_territories")
 
 ```
