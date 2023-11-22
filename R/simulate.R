@@ -34,6 +34,7 @@ simulate_spatial <- function(n_cells = 6000,
             "rod" = rod_map(n_cells, n_territories, width_range, length_range, layers),
             "chaos" = chaos_map(n_cells, expanse, "tinkerbell", layers))
         tmp_coord$sample <- i
+        tmp_coord$barcodes <- paste0(tmp_coord$barcodes, "_",i)
         sample_coord[[i]] <- tmp_coord
     }
     return(sample_coord)
@@ -51,7 +52,6 @@ simulate_cells <- function(spatial,
     }
     
     spatial <- do.call("rbind", spatial)
-    spatial$barcodes <- paste0(spatial$barcodes, "_",spatial$sample)
     ters <- sort(unique(spatial$Territory))
     total_cells <- nrow(spatial)
     for (i in seq_along(ters)){
@@ -67,8 +67,6 @@ simulate_cells <- function(spatial,
     }
 
     n_cells <- table(spatial$Territory)
-    spatial$barcodes <- sapply(strsplit(spatial$barcodes,"_"), "[[", 1)
-    #spatial <- split(spatial, spatial$sample)
     params <- splatter::newSplatParams(batchCells = total_cells, nGenes = n_genes)
     params <- splatter::setParam(params, "seed", seed)
     if (as_layer) {

@@ -51,7 +51,7 @@ assign_barcodes <- function(spatial, sim) {
 
 retrieve_counts <- function(spatial, sim) {
     spatial <- split(spatial, spatial$sample)
-    count <- lapply(spatial, function(spa, sim){
+    count <- lapply(spatial, function(spa, sim) {
             sim <- counts(sim)[, spa$cells]
             colnames(sim) <- spa$barcodes
             return(sim)
