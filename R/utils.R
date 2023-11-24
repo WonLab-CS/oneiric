@@ -56,5 +56,6 @@ retrieve_counts <- function(spatial, sim) {
             colnames(sim) <- spa$barcodes
             return(sim)
     }, sim = sim)
+    
     return(count)
 }
