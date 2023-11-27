@@ -183,7 +183,7 @@ export_simulation(spatial = circular_layer,
 chaos_layer <- simulate_spatial(n_cells = 5000,
     n_samples = 12,
     pattern = "chaos",
-    expanse = 0.02,
+    expanse = 0.1,
     layer = 5)
 
 chaos_layer_counts <- simulate_cells(chaos_layer,
@@ -203,6 +203,6 @@ print(g)
 export_simulation(spatial = chaos_layer,
     cells = chaos_layer_counts,
     out_dir = output,
-    file_tag = "layered_tinker_spatial_territories")
+    file_tag = "tinker_spatial_territories")
 
 ```
