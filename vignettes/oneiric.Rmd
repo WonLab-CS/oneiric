@@ -116,17 +116,17 @@ print(g)
 ## Simulate New Cells
 
 ```{r counts, eval = TRUE, echo = TRUE}
-circle_counts <- simulate_cells(circle,
+circle <- simulate_cells(circle,
     cell_composition = 2,
     n_genes = 2000,
     seed = 1729)
 
-rod_counts <- simulate_cells(rod,
+rod <- simulate_cells(rod,
     cell_composition = 2,
     n_genes = 2000,
     seed = 1729)
 
-chaos_counts <- simulate_cells(chaos_map,
+chaos <- simulate_cells(chaos_map,
     cell_composition = 2,
     n_genes = 2000,
     seed = 1729)
@@ -134,16 +134,16 @@ chaos_counts <- simulate_cells(chaos_map,
 
 ## Export Data sets
 ```{r export, eval = TRUE, echo = TRUE}
-export_simulation(spatial = circle,
-    cells = circle_counts,
+export_simulation(spatial = circle$spatial,
+    cells = circle$counts,
     out_dir = output,
     file_tag = "circle_spatial_territories")
-export_simulation(spatial = rod,
-    cells = rod_counts,
+export_simulation(spatial = rod$spatial,
+    cells = rod$counts,
     out_dir = output,
     file_tag = "rod_spatial_territories")
-export_simulation(spatial = chaos_map,
-    cells = chaos_counts,
+export_simulation(spatial = chaos$spatial,
+    cells = chaos$counts,
     out_dir = output,
     file_tag = "chaos_spatial_territories")
 ```
@@ -159,9 +159,10 @@ circular_layer <- simulate_spatial(n_cells = 5000,
     layer = 5)
 
 circular_layer_counts <- simulate_cells(circular_layer,
-    as_layer = TRUE)
+    as_layer = TRUE,
+    cell_composition = 2)
 
-circles <- do.call("rbind", circular_layer)
+circles <- do.call("rbind", circular_layer_counts$spatial)
 circles$Territory <- as.factor(circles$Territory)
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
@@ -172,8 +173,8 @@ g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
         override.aes = list(size =  5)))
 print(g)
 
-export_simulation(spatial = circular_layer,
-    cells = circular_layer_counts,
+export_simulation(spatial = circular_layer_counts$spatial,
+    cells = circular_layer_counts$counts,
     out_dir = output,
     file_tag = "layered_spatial_territories")
 
@@ -187,9 +188,10 @@ chaos_layer <- simulate_spatial(n_cells = 5000,
     layer = 5)
 
 chaos_layer_counts <- simulate_cells(chaos_layer,
-    as_layer = TRUE)
+    as_layer = TRUE,
+    cell_composition = 2)
 
-chaos <- do.call("rbind", chaos_layer)
+chaos <- do.call("rbind", chaos_layer_counts$spatial)
 chaos$Territory <- as.factor(chaos$Territory)
 g <- ggplot(chaos, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
@@ -200,8 +202,8 @@ g <- ggplot(chaos, aes(x = x, y = y, col = Territory)) +
         override.aes = list(size =  5)))
 print(g)
 
-export_simulation(spatial = chaos_layer,
-    cells = chaos_layer_counts,
+export_simulation(spatial = chaos_layer_counts$spatial,
+    cells = chaos_layer_counts$counts,
     out_dir = output,
     file_tag = "tinker_spatial_territories")
 

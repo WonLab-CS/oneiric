@@ -46,6 +46,8 @@ simulate_cells <- function(spatial,
     cell_composition = 1,
     n_genes = 2000,
     as_layer = FALSE,
+    de_prob = 0.25,
+    de_layer = 0.05,
     seed = 1729) {
     if (!is(spatial,"list")){
         spatial <- list(spatial)
@@ -70,9 +72,9 @@ simulate_cells <- function(spatial,
     params <- splatter::newSplatParams(batchCells = total_cells, nGenes = n_genes)
     params <- splatter::setParam(params, "seed", seed)
     if (as_layer) {
-        de <- c(0.25, rep(0.05, times = length(grep("_", names(n_cells)))))
+        de <- c(de_prob, de_prob, rep(de_layer, times = length(grep("_", names(n_cells)))))
     } else {
-        de <- rep(0.25, times = length(n_cells))
+        de <- rep(de_prob, times = length(n_cells))
     }
     sim <- splatter::splatSimulateGroups(params,
         group.prob = as.numeric(n_cells / sum(n_cells)),
@@ -80,6 +82,7 @@ simulate_cells <- function(spatial,
         verbose = FALSE)
     spatial <- assign_barcodes(spatial, sim)
     counts <- retrieve_counts(spatial, sim)
-    return(counts)
+    spatial <- split(spatial, spatial$sample)
+    return(list("counts" = counts, "spatial" = spatial))
 }
 
