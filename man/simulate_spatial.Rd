@@ -13,7 +13,8 @@ simulate_spatial(
   width_range = c(0, 0.3),
   length_range = c(0.1, 0.5),
   border = TRUE,
-  layers = 0
+  layers = 0,
+  force_cells = 0
 )
 }
 \arguments{

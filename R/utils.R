@@ -36,12 +36,12 @@ export_simulation <- function(spatial,
 #' @importFrom SingleCellExperiment counts
 
 assign_barcodes <- function(spatial, sim) {
-    territories <- sort(unique(spatial$Territory))
-    n_ters <- table(spatial$Territory)
+    territories <- sort(unique(spatial$cell_labels))
+    n_ters <- table(spatial$cell_labels)
     cells <- levels(SummarizedExperiment::colData(sim)$Group)
     spatial$cells <- NA
     for (i in seq_along(cells)){
-        spatial$cells[spatial$Territory == territories[i]] <- 
+        spatial$cells[spatial$cell_labels == territories[i]] <- 
             sample(x = colData(sim)$Cell[colData(sim)$Group == cells[i]],
                 size = n_ters[i],
                 replace = TRUE)

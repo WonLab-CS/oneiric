@@ -113,40 +113,38 @@ g <- ggplot(chaos, aes(x = x, y = y, col = Territory)) +
 print(g)
 ```
 
-## Simulate New Cells
+## Simulating Circle Territories 
 
-```{r counts, eval = TRUE, echo = TRUE}
-circle <- simulate_cells(circle,
-    cell_composition = 2,
-    n_genes = 2000,
-    seed = 1729)
+```{r circle_solo, eval = TRUE, echo = TRUE}
+# Making sure that we have common cell labels
+circular <- simulate_spatial(n_cells = 5000,
+    n_territories = 5,
+    n_samples = 12,
+    pattern = "circle",
+    expanse = c(0.1, 0.25),
+    force_cells = 10)
 
-rod <- simulate_cells(rod,
-    cell_composition = 2,
-    n_genes = 2000,
-    seed = 1729)
+circular_counts <- simulate_cells(circular,
+    cell_composition = 2)
 
-chaos <- simulate_cells(chaos_map,
-    cell_composition = 2,
-    n_genes = 2000,
-    seed = 1729)
-```
+circles <- do.call("rbind", circular_counts$spatial)
+circles$Territory <- as.factor(circles$Territory)
+g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
+    geom_point(size = 0.5) +
+    theme_bw() +
+    scale_color_brewer(palette = "Spectral") +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+print(g)
 
-## Export Data sets
-```{r export, eval = TRUE, echo = TRUE}
-export_simulation(spatial = circle$spatial,
-    cells = circle$counts,
+export_simulation(spatial = circular_counts$spatial,
+    cells = circular_counts$counts,
     out_dir = output,
     file_tag = "circle_spatial_territories")
-export_simulation(spatial = rod$spatial,
-    cells = rod$counts,
-    out_dir = output,
-    file_tag = "rod_spatial_territories")
-export_simulation(spatial = chaos$spatial,
-    cells = chaos$counts,
-    out_dir = output,
-    file_tag = "chaos_spatial_territories")
+
 ```
+
 
 ## Simulating Layered Territories 
 ### Circle Layers
@@ -156,15 +154,35 @@ circular_layer <- simulate_spatial(n_cells = 5000,
     n_samples = 12,
     pattern = "circle",
     expanse = c(0.4, 0.5),
-    layer = 5)
+    layer = 5,
+    force_cells = 12)
 
 circular_layer_counts <- simulate_cells(circular_layer,
     as_layer = TRUE,
     cell_composition = 2)
 
+# to mimic poor cell type labels 
+circular_layer_counts$spatial <- lapply(circular_layer_counts$spatial,
+    function(l) {
+        locs <- which(l$Territory != 0)
+        labs <- sapply(strsplit(l$cell_labels,"_"),"[[",1)
+        l$Territory <- labs
+        return(l)
+    }
+)
 circles <- do.call("rbind", circular_layer_counts$spatial)
 circles$Territory <- as.factor(circles$Territory)
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
+    geom_point(size = 0.5) +
+    theme_bw() +
+    scale_color_brewer(palette = "Spectral") +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+print(g)
+
+circles$cell_labels <- as.factor(circles$cell_labels)
+g <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
     geom_point(size = 0.5) +
     theme_bw() +
     scale_color_brewer(palette = "Spectral") +
@@ -184,13 +202,22 @@ export_simulation(spatial = circular_layer_counts$spatial,
 chaos_layer <- simulate_spatial(n_cells = 5000,
     n_samples = 12,
     pattern = "chaos",
-    expanse = 0.1,
-    layer = 5)
+    expanse = 0.2,
+    layer = 3,
+    force_cells = 4)
 
 chaos_layer_counts <- simulate_cells(chaos_layer,
     as_layer = TRUE,
     cell_composition = 2)
 
+chaos_layer_counts$spatial <- lapply(chaos_layer_counts$spatial,
+    function(l) {
+        locs <- which(l$Territory != 0)
+        labs <- sapply(strsplit(l$cell_labels,"_"),"[[",1)
+        l$Territory <- labs
+        return(l)
+    }
+)
 chaos <- do.call("rbind", chaos_layer_counts$spatial)
 chaos$Territory <- as.factor(chaos$Territory)
 g <- ggplot(chaos, aes(x = x, y = y, col = Territory)) +
@@ -202,6 +229,16 @@ g <- ggplot(chaos, aes(x = x, y = y, col = Territory)) +
         override.aes = list(size =  5)))
 print(g)
 
+
+chaos$cell_labels <- as.factor(chaos$cell_labels)
+g <- ggplot(chaos, aes(x = x, y = y, col = cell_labels)) +
+    geom_point(size = 0.5) +
+    theme_bw() +
+    scale_color_brewer(palette = "Spectral") +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+print(g)
 export_simulation(spatial = chaos_layer_counts$spatial,
     cells = chaos_layer_counts$counts,
     out_dir = output,
