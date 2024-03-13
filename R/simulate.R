@@ -67,8 +67,9 @@ simulate_cells <- function(spatial,
     cell_composition = 1,
     n_genes = 2000,
     as_layer = FALSE,
-    de_prob = 0.5,
-    de_layer = 0.01,
+    de_prob = 0.3,
+    de_layer = 0.03,
+    no_label = FALSE,
     seed = 1729) {
     if (!is(spatial,"list")){
         spatial <- list(spatial)
@@ -104,6 +105,9 @@ simulate_cells <- function(spatial,
         verbose = FALSE)
     spatial <- assign_barcodes(spatial, sim)
     counts <- retrieve_counts(spatial, sim)
+    if (no_label) {
+        spatial$Territory <- 0
+    }
     spatial <- split(spatial, spatial$sample)
     return(list("counts" = counts, "spatial" = spatial))
 }
