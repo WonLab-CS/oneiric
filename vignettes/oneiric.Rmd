@@ -207,13 +207,6 @@ g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
     guides(colour = guide_legend(
         override.aes = list(size =  5)))
 
-
-
-export_simulation(spatial = circular_counts$spatial,
-    cells = circular_counts$counts,
-    out_dir = output,
-    file_tag = "circle_spatial_territories")
-
 ```
 
 ```{r no_lab_g_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="No label territories assumes that no cell type information is provided. A single label is given to all cells in the Territory column"}
@@ -222,6 +215,14 @@ print(g)
 
 ```{r no_lab_g1_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="No label territories assumes that no cell type information is provided. Ground truth cell type labels are still provided as the cell_lables column"}
 print(g1)
+```
+
+```{r export_circle, eval = FALSE, echo =TRUE}
+export_simulation(spatial = circular_counts$spatial,
+    cells = circular_counts$counts,
+    out_dir = output,
+    file_tag = "circle_spatial_territories")
+
 ```
 
 
@@ -269,10 +270,7 @@ g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
         override.aes = list(size =  5)))
 
 
-export_simulation(spatial = circular_layer_counts_nl$spatial,
-    cells = circular_layer_counts_nl$counts,
-    out_dir = output,
-    file_tag = "layered_spatial_territories")
+
 
 ```
 ```{r no_lab_lay_g_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="No label territories assumes that no cell type information is provided. A single label is given to all cells in the Territory column"}
@@ -281,4 +279,11 @@ print(g)
 
 ```{r no_lab_lay_g1_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="No label territories assumes that no cell type information is provided. Ground truth cell type labels are still provided as the cell_lables column"}
 print(g1)
+```
+
+```{r export_layer, eval = FALSE, echo = TRUE}
+export_simulation(spatial = circular_layer_counts_nl$spatial,
+    cells = circular_layer_counts_nl$counts,
+    out_dir = output,
+    file_tag = "layered_spatial_territories")
 ```
