@@ -2,6 +2,8 @@
 
 Simulated Spatial Transcriptomic data.
 
+o·nei·ric (/ōˈnīrik/): relating to dreams or dreaming.
+
 ## Why a package?
 
 Simulation are an essential tool kit to benchmark computational methods. Here, we developped a simple package
@@ -29,7 +31,6 @@ First, clone the repository. Alternatively, you can download the zip file and un
 ```
 git clone https://github.com/WonLab-CS/oneiric.git
 cd oneiric 
-
 ```
 
 Then from the command line
