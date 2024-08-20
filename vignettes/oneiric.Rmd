@@ -196,7 +196,7 @@ circles$Territory <- as.factor(circles$Territory)
 cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
-    geom_point(size = 0.5) +
+    geom_point(size = 0.75) +
     theme_bw() +
     scale_color_manual(values = cols) +
     facet_wrap(~sample) +
@@ -209,7 +209,7 @@ circles$cell_labels <- as.factor(circles$cell_labels)
 cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$cell_labels)))
 g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
-    geom_point(size = 0.5) +
+    geom_point(size = 0.75) +
     theme_bw() +
     scale_color_manual(values = cols) +
     facet_wrap(~sample) +
@@ -226,7 +226,7 @@ print(g)
 print(g1)
 ```
 
-```{r export_circle, eval = FALSE, echo =TRUE}
+```{r export_circle, eval = TRUE, echo =TRUE}
 export_simulation(spatial = circular_counts$spatial,
     cells = circular_counts$counts,
     out_dir = output,
@@ -260,7 +260,7 @@ circles$Territory <- as.factor(circles$Territory)
 cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
-    geom_point(size = 0.5) +
+    geom_point(size = 0.75) +
     theme_bw() +
     scale_color_manual(values = cols) +
     facet_wrap(~sample) +
@@ -272,7 +272,7 @@ circles$cell_labels <- as.factor(circles$cell_labels)
 cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$cell_labels)))
 g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
-    geom_point(size = 0.5) +
+    geom_point(size = 0.75) +
     theme_bw() +
     scale_color_manual(values = cols) +
     facet_wrap(~sample) +
@@ -291,9 +291,74 @@ print(g)
 print(g1)
 ```
 
-```{r export_layer, eval = FALSE, echo = TRUE}
+```{r export_layer, eval = TRUE, echo = TRUE}
 export_simulation(spatial = circular_layer_counts_nl$spatial,
     cells = circular_layer_counts_nl$counts,
     out_dir = output,
     file_tag = "layered_spatial_territories")
+```
+
+
+## Simuating Layer regime with dropped cells
+
+```{r circle_layer_rnd, eval = TRUE, echo = TRUE}
+circular_layer_rnd <- simulate_spatial(n_cells = 5000,
+    n_territories = 2,
+    n_samples = 12,
+    pattern = "circle",
+    expanse = c(0.15, 0.3),
+    layer = 4,
+    force_cells = 5)
+
+circular_layer_counts_rnd <- simulate_cells(circular_layer_rnd,
+    as_layer = TRUE,
+    de_prob = 0.5,
+    de_layer = 0.05,
+    cell_composition = 2,
+    no_label = TRUE,
+    randomize_cells = TRUE)
+
+# to mimic no cell type labels available
+
+circles <- do.call("rbind", circular_layer_counts_rnd$spatial)
+circles$Territory <- as.factor(circles$Territory)
+cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- cols(length(levels(circles$Territory)))
+g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
+    geom_point(size = 0.75) +
+    theme_bw() +
+    scale_color_manual(values = cols) +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+
+
+circles$cell_labels <- as.factor(circles$cell_labels)
+cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- cols(length(levels(circles$cell_labels)))
+g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
+    geom_point(size = 0.75) +
+    theme_bw() +
+    scale_color_manual(values = cols) +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+
+
+
+
+```
+```{r rnd_lay_g_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="Dropped cells assumes that not all cells are present between datasets."}
+print(g)
+```
+
+```{r rnd_lay_g1_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="Dropped cells assumes that not all cells are present between datasets."}
+print(g1)
+```
+
+```{r export_rnd, eval = TRUE, echo = TRUE}
+export_simulation(spatial = circular_layer_counts_rnd$spatial,
+    cells = circular_layer_counts_rnd$counts,
+    out_dir = output,
+    file_tag = "dropped_spatial_territories")
 ```

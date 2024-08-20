@@ -70,28 +70,14 @@ simulate_cells <- function(spatial,
     de_prob = 0.3,
     de_layer = 0.03,
     no_label = FALSE,
+    randomize_cells = FALSE,
     seed = 1729) {
     if (!is(spatial,"list")){
         spatial <- list(spatial)
     }
-    
-    spatial <- do.call("rbind", spatial)
-    spatial$cell_labels <- NA
-    ters <- sort(unique(spatial$Territory))
-    total_cells <- nrow(spatial)
-    for (i in seq_along(ters)){
-        bars <- spatial$barcodes[spatial$Territory == ters[i]]
-        split_size <- ceiling(length(bars) / cell_composition)
-        split_names <- make.unique(as.character(rep(ters[i], times = cell_composition)))
-        for (j in seq_len(cell_composition)){
-            samp <- sample(bars, size = min(c(split_size,length(bars))))
-            spatial$cell_labels[spatial$barcodes %in% samp] <-
-                split_names[j]
-            bars <- bars[!bars %in% samp]
-        }
-    }
-
+    spatial <- generate_cell_labels(spatial,cell_composition, randomize_cells)
     n_cells <- table(spatial$cell_labels)
+    total_cells <- nrow(spatial)
     params <- splatter::newSplatParams(batchCells = total_cells, nGenes = n_genes)
     params <- splatter::setParam(params, "seed", seed)
     if (as_layer) {

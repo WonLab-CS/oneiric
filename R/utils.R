@@ -59,3 +59,45 @@ retrieve_counts <- function(spatial, sim) {
     
     return(count)
 }
+
+generate_cell_labels <- function(spatial,
+    cell_composition,
+    randomize_cells = FALSE) {
+    for (sample in seq_along(spatial)){
+        samp <- spatial[[sample]]
+        territories <- unique(samp$Territory)
+        samp$cell_labels <- NA
+        for (ter in seq_along(territories)) {
+            barcodes <- samp$barcodes[samp$Territory == territories[ter]]
+            if (randomize_cells) {
+                n_labels <- sample(seq(1, cell_composition), size = 1)
+                if (n_labels != 1) {
+                    sample_limit <-  stats::rgamma(n_labels, shape = 1)
+                    sample_limit <- sample_limit / sum(sample_limit)
+                    sample_limit <- ceiling(sample_limit * length(barcodes))
+                } else {
+                    sample_limit <- length(barcodes)
+                }
+                
+            } else {
+                n_labels <- cell_composition
+                sample_limit <- rep(ceiling(length(barcodes) / cell_composition),
+                    times = cell_composition)
+            }
+            cell_labels <- make.unique(
+                    as.character(
+                    rep(territories[ter],
+                    times = n_labels)))
+            for (labs in seq_len(n_labels)) {
+                #browser()
+                selection <- sample(barcodes, size = min(c(sample_limit[labs],length(barcodes))))
+                samp$cell_labels[samp$barcodes %in% selection] <-
+                    cell_labels[labs]
+                barcodes <- barcodes[!barcodes %in% selection]
+            }
+        }
+        spatial[[sample]] <- samp
+    }
+    spatial <- do.call("rbind", spatial)
+    return(spatial)
+}
