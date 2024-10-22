@@ -52,7 +52,7 @@ rmarkdown::render("oneiric/vignettes/oneiric.Rmd")
 ```
 
 ## Example Run
-If you prefer following along instead of rendering the vignette directly, here is a breack down of the package and it's abilities.
+If you prefer following along instead of rendering the vignette directly, here is a breack down of the package and it's abilities. The total run time should not exceed a few minutes.
 
 
 ##  Introduction
