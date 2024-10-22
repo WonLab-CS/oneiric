@@ -11,6 +11,10 @@ that convenietly wraps the code we used to generate our simulated data.
 
 We hope that this approach will improve reproducibility and replicability of our results. 
 
+We created and tested our simulations on the following OS:
+
+* macOS sequoia 15.0
+
 ## Installation 
 
 For the original installation, we will not build the vignette.
