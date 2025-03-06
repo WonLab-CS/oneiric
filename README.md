@@ -14,6 +14,7 @@ We hope that this approach will improve reproducibility and replicability of our
 We created and tested our simulations on the following OS:
 
 * macOS sequoia 15.0
+* Red Hat Enterprise Linux 8.5 (Ootpa)
 
 ## Installation 
 ### From GitHub
