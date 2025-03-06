@@ -59,3 +59,9 @@ generate_sim_data(output = output,
     run_mem = TRUE,
     simple = TRUE)
 ```
+
+## TO DO
+
+1. Refector code for clarity
+2. Add extensive function documentation
+3. Add unit tests
