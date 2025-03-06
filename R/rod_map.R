@@ -34,6 +34,7 @@ rod_map <- function(n_cells = 6000,
     for (i in seq_along(distances)) {
         coord$Territory[distances[[i]]] <- i
     }
+    comment(coord) <- "rod"
     #-------------------------------------------------------------------------#
     # We will use vesalius if there is a need for layers
     #-------------------------------------------------------------------------#
@@ -53,7 +54,7 @@ rod_map <- function(n_cells = 6000,
                     ves@territories[coord$Territory ==
                     ter_to_layer[i],ncol(ves@territories)])
         }
-
+        comment(coord) <- paste0("rod_",layers)
     }
     return(coord)
     
@@ -68,7 +69,11 @@ rod_it <- function(idx, x, y, width_range, length_range) {
     x_1 <- x[d_end]
     y_1 <- y[d_end]
     d <- dist_line(x_0, y_0, x_1, y_1, x, y)
-    return(d >= width_range[1] & d <= width_range[2])
+    width <- runif(2, min = width_range[1], max = width_range[2])
+    while (max(width) - min(width) < max(width)/2) {
+        width <- runif(2, min = width_range[1], max = width_range[2])
+    }
+    return(d >= min(width) & d <= max(width))
 }
 
 

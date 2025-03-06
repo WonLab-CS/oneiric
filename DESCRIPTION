@@ -13,6 +13,8 @@ Collate: simulate.R
   utils.R
   data.R
   viz.R
+  contact_deg.R
+  generate_simulated_data.R
 Depends: R (>= 4.0.0)
 Imports:
   grDevices,
@@ -26,5 +28,5 @@ Suggests:
   testthat (>= 3.0.0)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr

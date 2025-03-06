@@ -60,6 +60,14 @@ retrieve_counts <- function(spatial, sim) {
     return(count)
 }
 
+get_layers <- function(layers){
+    n_layers <- strsplit(layers, "_")
+    non_zero_layer <- sapply(n_layers,length) > 1
+    layers <- rep(0, times = length(layers))
+    layers[non_zero_layer] <- as.numeric(sapply(n_layers[non_zero_layer],"[[",2))
+    return(layers)
+}
+
 generate_cell_labels <- function(spatial,
     cell_composition,
     randomize_cells = FALSE) {
@@ -100,4 +108,11 @@ generate_cell_labels <- function(spatial,
     }
     spatial <- do.call("rbind", spatial)
     return(spatial)
+}
+
+
+normalize_interaction <- function(x) {
+  parts <- strsplit(x, "@")[[1]]
+  sorted_parts <- sort(parts)
+  paste(sorted_parts, collapse = "@")
 }

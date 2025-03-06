@@ -25,7 +25,7 @@ chaos_map <- function(n_cells = 6000,
     coord <- data.frame(barcodes, x, y, "Territory" = 0)
     coord <- switch(chaos,
         "tinkerbell" = tinkerbell_map(coord))
-    
+    comment(coord) <- "chaos"
     #-------------------------------------------------------------------------#
     # We will use vesalius if there is a need for layers
     #-------------------------------------------------------------------------#
@@ -48,6 +48,7 @@ chaos_map <- function(n_cells = 6000,
                 paste0(ter_to_layer, "_",
                     ves@territories[coord$Territory ==
                     ter_to_layer, "Layer"])
+        comment(coord) <- paste0("chaos_",layers)
         return(coord)
     } else if (expanse > 0 && layers == 0) {
         ves <- build_vesalius_assay(coordinates = coord, verbose = FALSE) %>%
@@ -61,6 +62,7 @@ chaos_map <- function(n_cells = 6000,
             verbose = FALSE)
         coord <- ves@territories[, c("barcodes", "x", "y", "Morphology")]
         colnames(coord) <- gsub("Morphology", "Territory", colnames(coord))
+        
         return(coord) 
     } else {
         return(coord)

@@ -58,17 +58,18 @@ map_params <- find_tinkerbell(time = 120,
 
 ```{r out_dir, eval = TRUE, echo = TRUE}
 
-output <- "/Users/martinp4/Documents/Cedars/Oneiric/simulations/"
+output <- "Oneiric/simulations/"
 ```
 
 
 ## Territory Types
-Here, we demonstrate the possible territory types that can be created using oneiric. We have four types:
+We have four territory types you can create:
 
 * Circle: randomly size circles placed in a background territory.
 * Rod: randomly size rod-like structures placed in a background territory.
 * Chaos: tinkerbell progression chaos map placed in a background.
-* Layered: any of the above but each territory will divided into layers. 
+* Random: will randomly sample one of the above (differing probabilities)
+
 
 
 ```{r spatial_sim, eval = TRUE, echo = TRUE}
@@ -88,14 +89,14 @@ rod <- simulate_spatial(n_cells = 5000,
 chaos_map <- simulate_spatial(n_cells = 5000,
     n_samples = 12,
     pattern = "chaos",
-    expanse = 0.02) # expanse will dilate the territory by a factor of 0.02 (max of 1)
+    expanse = 0.02) 
 
-layered_map <- simulate_spatial(n_cells = 5000,
+random_map <- simulate_spatial(n_cells = 5000,
+    n_territories = 5,
     n_samples = 12,
-    n_territories = 1,
-    pattern = "circle",
-    layers = 5,
-    expanse =  c(0.4, 0.5))
+    pattern = "random",
+    width_range = c(0.0, 0.1),
+    length_range = c(0.2, 0.5))
 
 ```
 
@@ -141,11 +142,11 @@ g2 <- ggplot(tinker, aes(x = x, y = y, col = Territory)) +
         override.aes = list(size =  5)))
 
 
-layers <- do.call("rbind", layered_map)
-layers$Territory <- as.factor(layers$Territory)
+random <- do.call("rbind", random_map)
+random$Territory <- as.factor(random$Territory)
 cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
-cols <- cols(length(levels(layers$Territory)))
-g3 <- ggplot(layers, aes(x = x, y = y, col = Territory)) +
+cols <- cols(length(levels(random$Territory)))
+g3 <- ggplot(random, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
     theme_bw() +
     scale_color_manual(values = cols) +
@@ -167,16 +168,15 @@ print(g1)
 print(g2)
 ```
 
-```{r g3_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="Layered Territories"}
+```{r g3_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="Random Territories"}
 print(g3)
 ```
 
-# Creating Simulated Data Sets
+# Adding Cell Counts
 
-This section covers how the data sets used for benchmarking Vesalius were produced. 
-We produce data sets with no cell labels.
+Once you have created the territories you like, you can add counts to these territories
 
-## Simulating Circle regime
+## Simple Counts
 
 ```{r circle_solo, eval = TRUE, echo = TRUE}
 
@@ -226,7 +226,8 @@ print(g)
 print(g1)
 ```
 
-```{r export_circle, eval = TRUE, echo =TRUE}
+In case you would like to export:
+```{r export_circle, eval = FALSE, echo =TRUE}
 export_simulation(spatial = circular_counts$spatial,
     cells = circular_counts$counts,
     out_dir = output,
@@ -247,7 +248,6 @@ circular_layer_nl <- simulate_spatial(n_cells = 5000,
     force_cells = 12)
 
 circular_layer_counts_nl <- simulate_cells(circular_layer_nl,
-    as_layer = TRUE,
     de_prob = 0.5,
     de_layer = 0.05,
     cell_composition = 2,
@@ -291,7 +291,8 @@ print(g)
 print(g1)
 ```
 
-```{r export_layer, eval = TRUE, echo = TRUE}
+In case you would like to export:
+```{r export_layer, eval = FALSE, echo = TRUE}
 export_simulation(spatial = circular_layer_counts_nl$spatial,
     cells = circular_layer_counts_nl$counts,
     out_dir = output,
@@ -311,7 +312,6 @@ circular_layer_rnd <- simulate_spatial(n_cells = 5000,
     force_cells = 5)
 
 circular_layer_counts_rnd <- simulate_cells(circular_layer_rnd,
-    as_layer = TRUE,
     de_prob = 0.5,
     de_layer = 0.05,
     cell_composition = 2,
@@ -356,9 +356,69 @@ print(g)
 print(g1)
 ```
 
-```{r export_rnd, eval = TRUE, echo = TRUE}
+In case you would like to export:
+```{r export_rnd, eval = FALSE, echo = TRUE}
 export_simulation(spatial = circular_layer_counts_rnd$spatial,
     cells = circular_layer_counts_rnd$counts,
     out_dir = output,
     file_tag = "dropped_spatial_territories")
 ```
+
+## Simulating full random data sets 
+
+```{r random_layer_rnd, eval = TRUE, echo = TRUE}
+circular_layer_rnd <- simulate_spatial(n_cells = 5000,
+    n_territories = 3,
+    n_samples = 12,
+    pattern = "random",
+    expanse = c(0.15, 0.3),
+    width_range = c(0, 0.3),
+    length_range = c(0.15,0.3),
+    layer = seq(1,4),
+    force_cells = 5)
+
+circular_layer_counts_rnd <- simulate_cells(circular_layer_rnd,
+    de_prob = 0.5,
+    de_layer = 0.05,
+    cell_composition = 2,
+    no_label = TRUE,
+    randomize_cells = TRUE)
+
+# to mimic no cell type labels available
+
+circles <- do.call("rbind", circular_layer_counts_rnd$spatial)
+circles$Territory <- as.factor(circles$Territory)
+cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- cols(length(levels(circles$Territory)))
+g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
+    geom_point(size = 0.75) +
+    theme_bw() +
+    scale_color_manual(values = cols) +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+
+
+circles$cell_labels <- as.factor(circles$cell_labels)
+cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- cols(length(levels(circles$cell_labels)))
+g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
+    geom_point(size = 0.75) +
+    theme_bw() +
+    scale_color_manual(values = cols) +
+    facet_wrap(~sample) +
+    guides(colour = guide_legend(
+        override.aes = list(size =  5)))
+
+
+
+
+```
+```{r random_lay_g_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="Dropped cells assumes that not all cells are present between datasets."}
+print(g)
+```
+
+```{r random_lay_g1_plot , eval = TRUE, echo = TRUE, fig.width=12,fig.height=11, fig.cap="Dropped cells assumes that not all cells are present between datasets."}
+print(g1)
+```
+

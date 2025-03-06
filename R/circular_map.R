@@ -28,10 +28,10 @@ circular_map <- function(n_cells = 6000,
     for (i in seq_along(distances)) {
         coord$Territory[distances[[i]]] <- i
     }
+    comment(coord) <- "circle"
     #-------------------------------------------------------------------------#
     # We will use vesalius if there is a need for layers
     #-------------------------------------------------------------------------#
-    
     if (layers > 0) {
         ves <- build_vesalius_assay(coordinates = coord, verbose = FALSE) %>%
             generate_tiles(filter_grid = 1, filter_threshold = 1, verbose = FALSE)
@@ -48,7 +48,8 @@ circular_map <- function(n_cells = 6000,
                     ves@territories[coord$Territory ==
                     ter_to_layer[i],ncol(ves@territories)])
         }
-
+        comment(coord) <- paste0("circle_",layers)
     }
+    
     return(coord)
 }
