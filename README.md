@@ -37,7 +37,7 @@ R CMD build oneiric
 Rscript -e "install.packages("oneiric_0.0.1.tar.gz, repos  = NULL)
 ```
 
-## Generating Simulations the sumulations
+## Generating Simulations
 
 We provide a vignette showing different options to generate simulate data. 
 
