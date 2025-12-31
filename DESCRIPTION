@@ -20,7 +20,8 @@ Imports:
   grDevices,
   ggplot2,
   dplyr,
-  vesalius
+  vesalius,
+  splatter
 Suggests:
   knitr,
   RUnit,
