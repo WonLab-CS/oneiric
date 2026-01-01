@@ -23,11 +23,11 @@
             roxygen2
             RUnit
             tidyr
-            grDevices,
-            splatter,
-            RANN,
-            SingleCellExperiment,
-            SummarizedExperiment,
+            grDevices
+            splatter
+            RANN
+            SingleCellExperiment
+            SummarizedExperiment
             deldir;
         };
 
