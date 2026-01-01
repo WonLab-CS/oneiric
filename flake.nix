@@ -23,7 +23,6 @@
             roxygen2
             RUnit
             tidyr
-            grDevices
             splatter
             RANN
             SingleCellExperiment
