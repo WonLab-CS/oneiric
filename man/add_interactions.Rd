@@ -23,14 +23,10 @@ add_interactions(
 
 \item{k}{Integer specifying the number of nearest neighbors to consider (for knn method)}
 }
+\value{
+A list of data frames with interaction information added
+}
 \description{
 This function identifies cell-cell interactions in spatial data by finding
 neighboring cells and annotates the spatial coordinates with interaction labels.
-}
-\details{
-This function identifies cell-cell interactions in spatial data by finding
-neighboring cells and annotates the spatial coordinates with interaction labels.
-}
-\value{
-A list of data frames with interaction information added
 }

@@ -4,20 +4,12 @@
 \alias{generate_sim_data}
 \title{Function to generate data for simuation analysis.}
 \usage{
-generate_sim_data(
-  output,
-  seed = 1453,
-  plot = FALSE,
-  run_mem = FALSE,
-  simple = FALSE
-)
+generate_sim_data(output, seed = 1453, run_mem = FALSE, simple = FALSE)
 }
 \arguments{
 \item{output}{path to directory where files will be added}
 
 \item{seed}{seed for consitent generation}
-
-\item{plot}{logical - export plots or not}
 }
 \description{
 Function to generate data for simuation analysis.

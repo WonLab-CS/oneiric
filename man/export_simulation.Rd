@@ -15,14 +15,10 @@ export_simulation(spatial, cells, out_dir = getwd(), file_tag = NULL)
 
 \item{file_tag}{Character string to prefix output filenames}
 }
+\value{
+NULL (files are written to disk)
+}
 \description{
 This function exports the simulated spatial coordinates and gene count matrices
 to CSV files for each sample in the simulation.
-}
-\details{
-This function exports the simulated spatial coordinates and gene count matrices
-to CSV files for each sample in the simulation.
-}
-\value{
-NULL (files are written to disk)
 }

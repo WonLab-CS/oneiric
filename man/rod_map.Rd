@@ -18,13 +18,13 @@ rod_map(
 \item{n_territories}{Integer specifying the maximum number of rod territories to create}
 
 \item{width_range}{Numeric vector of length 2 specifying the minimum and maximum
-  rod width as proportions of total spatial area (default: c(0.0, 0.05))}
+rod width as proportions of total spatial area (default: c(0.0, 0.05))}
 
 \item{length_range}{Numeric vector of length 2 specifying the minimum and maximum
-  rod length as proportions of total spatial area (default: c(0.1, 0.5))}
+rod length as proportions of total spatial area (default: c(0.1, 0.5))}
 
 \item{layers}{Integer specifying the number of morphological layers to create
-  within each territory (default: 0 for no layers)}
+within each territory (default: 0 for no layers)}
 }
 \value{
 Data frame with columns: barcodes, x, y, Territory
@@ -52,4 +52,5 @@ coords <- rod_map(n_cells = 1000, n_territories = 3,
 coords <- rod_map(n_cells = 1000, n_territories = 2,
                   width_range = c(0.02, 0.04), length_range = c(0.3, 0.5),
                   layers = 2)
+
 }

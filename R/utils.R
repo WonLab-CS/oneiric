@@ -58,8 +58,7 @@ export_simulation <- function(spatial,
     return(NULL)
 }
 
-#' @importFrom SummarizedExperiment colData
-#' @importFrom SingleCellExperiment counts
+
 
 #' Assign simulated cell barcodes to spatial coordinates
 #'
@@ -73,6 +72,8 @@ export_simulation <- function(spatial,
 #' @return Data frame with 'cells' column added containing barcodes from the simulation
 #'
 #' @keywords internal
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SingleCellExperiment counts
 assign_barcodes <- function(spatial, sim) {
     territories <- sort(unique(spatial$cell_labels))
     n_ters <- table(spatial$cell_labels)

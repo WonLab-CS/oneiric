@@ -10,13 +10,13 @@ chaos_map(n_cells = 6000, expanse = 0.1, chaos = "tinkerbell", layers = 0)
 \item{n_cells}{Integer specifying the number of cells to simulate}
 
 \item{expanse}{Numeric value specifying the expansion factor for territory
-  morphology as a proportion of spatial area (default: 0.1)}
+morphology as a proportion of spatial area (default: 0.1)}
 
 \item{chaos}{Character string specifying which chaotic map to use
-  (currently only "tinkerbell" is supported)}
+(currently only "tinkerbell" is supported)}
 
 \item{layers}{Integer specifying the number of morphological layers to create
-  within the territory (default: 0 for no layers)}
+within the territory (default: 0 for no layers)}
 }
 \value{
 Data frame with columns: barcodes, x, y, Territory
@@ -42,4 +42,5 @@ coords <- chaos_map(n_cells = 1000, expanse = 0.2, chaos = "tinkerbell")
 
 # Create a layered chaotic territory
 coords <- chaos_map(n_cells = 1000, expanse = 0.3, chaos = "tinkerbell", layers = 3)
+
 }

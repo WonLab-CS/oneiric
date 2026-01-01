@@ -32,15 +32,11 @@ add_contact_deg(
 
 \item{collapse}{Logical indicating whether to collapse neighbor labels}
 }
-\description{
-This function adds gene expression patterns that depend on cell-cell contacts
-by identifying neighboring cells and assigning specific genes to those interactions.
-}
-\details{
-This function adds gene expression patterns that depend on cell-cell contacts
-by identifying neighboring cells and assigning specific genes to those interactions.
-}
 \value{
 A list containing the modified simulated data, genes assigned to interactions,
 and the interaction pairs identified
+}
+\description{
+This function adds gene expression patterns that depend on cell-cell contacts
+by identifying neighboring cells and assigning specific genes to those interactions.
 }

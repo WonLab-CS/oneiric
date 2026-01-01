@@ -93,7 +93,7 @@ chaos_map <- function(n_cells = 6000,
 }
 
 
-#' @importFrom RANN nn2
+
 
 #' Apply tinkerbell chaotic map to spatial coordinates
 #'
@@ -106,6 +106,7 @@ chaos_map <- function(n_cells = 6000,
 #' @return Data frame with Territory column updated to reflect chaotic pattern
 #'
 #' @keywords internal
+#' @importFrom RANN nn2
 tinkerbell_map <- function(coord, chaos = FALSE) {
     data(oneiric)
     params <- map_params[sample(seq(1,nrow(map_params)),1), ]

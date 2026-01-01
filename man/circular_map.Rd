@@ -17,10 +17,10 @@ circular_map(
 \item{n_territories}{Integer specifying the maximum number of circular territories to create}
 
 \item{expanse}{Numeric vector of length 2 specifying the minimum and maximum radius
-  as proportions of the total spatial area (default: c(0.01, 0.5))}
+as proportions of the total spatial area (default: c(0.01, 0.5))}
 
 \item{layers}{Integer specifying the number of morphological layers to create
-  within each territory (default: 0 for no layers)}
+within each territory (default: 0 for no layers)}
 }
 \value{
 Data frame with columns: barcodes, x, y, Territory
@@ -43,4 +43,5 @@ coords <- circular_map(n_cells = 1000, n_territories = 3, expanse = c(0.1, 0.3))
 
 # Create layered circular territories
 coords <- circular_map(n_cells = 1000, n_territories = 2, expanse = c(0.2, 0.4), layers = 3)
+
 }
