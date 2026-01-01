@@ -2,27 +2,44 @@
 % Please edit documentation in R/chaos_maps.R
 \name{chaos_map}
 \alias{chaos_map}
-\title{Create chaotic territoies}
+\title{Create chaotic territories using strange attractors}
 \usage{
 chaos_map(n_cells = 6000, expanse = 0.1, chaos = "tinkerbell", layers = 0)
 }
 \arguments{
-\item{n_cells}{int - number of cells to create}
+\item{n_cells}{Integer specifying the number of cells to simulate}
 
-\item{expanse}{numeric -  max proportion of total width to use for
-territory expansion.}
+\item{expanse}{Numeric value specifying the expansion factor for territory
+  morphology as a proportion of spatial area (default: 0.1)}
 
-\item{chaos}{character - string specifying which chaos map to use}
+\item{chaos}{Character string specifying which chaotic map to use
+  (currently only "tinkerbell" is supported)}
 
-\item{layers}{int - number of layers in each rod territory}
+\item{layers}{Integer specifying the number of morphological layers to create
+  within the territory (default: 0 for no layers)}
 }
 \value{
-coordinate data frame with barcodes, x, y, and Territories
+Data frame with columns: barcodes, x, y, Territory
 }
 \description{
-Create chaotic territoies
+Generates spatial territories with chaotic, irregular shapes by mapping
+trajectories from strange attractors (such as the tinkerbell map) onto
+spatial coordinates. Creates complex, non-geometric territory boundaries.
 }
 \details{
-Create a a territory using chaos mapping means that there
-be only one territory but it will have a chaotic shape.
+The function creates chaotic territories by:
+1. Randomly distributing cells in 2D space
+2. Generating a trajectory using a strange attractor (tinkerbell map)
+3. Mapping the chaotic trajectory onto spatial coordinates using nearest neighbors
+4. Optionally expanding and layering the territory using vesalius morphological operations
+
+This creates territories with fractal-like, irregular boundaries that are
+biologically more realistic than simple geometric shapes.
+}
+\examples{
+# Create a simple chaotic territory
+coords <- chaos_map(n_cells = 1000, expanse = 0.2, chaos = "tinkerbell")
+
+# Create a layered chaotic territory
+coords <- chaos_map(n_cells = 1000, expanse = 0.3, chaos = "tinkerbell", layers = 3)
 }

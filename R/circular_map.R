@@ -1,10 +1,32 @@
-#' Create circular  territoies
-#' @param n_cells int - number of cells to create
-#' @param n_territories int -  max number of territories to generate
-#' @param layers int - number of layers in each rod territory
-#' @param expanse numeric -  max proportion of total width to use as 
-#' circle radius
-#' @return coordinate data frame with barcodes, x, y, and Territories 
+#' Create circular territories
+#'
+#' Generates spatial territories with circular shapes by randomly placing centers
+#' and assigning cells within specified radius ranges. Supports multi-layer territories
+#' using the vesalius package for morphological processing.
+#'
+#' @param n_cells Integer specifying the number of cells to simulate
+#' @param n_territories Integer specifying the maximum number of circular territories to create
+#' @param expanse Numeric vector of length 2 specifying the minimum and maximum radius
+#'   as proportions of the total spatial area (default: c(0.01, 0.5))
+#' @param layers Integer specifying the number of morphological layers to create
+#'   within each territory (default: 0 for no layers)
+#'
+#' @return Data frame with columns: barcodes, x, y, Territory
+#'
+#' @details
+#' The function creates circular territories by:
+#' 1. Randomly distributing cells in 2D space
+#' 2. Selecting random center points for territories
+#' 3. Assigning cells to territories based on distance from centers
+#' 4. Optionally creating layered territories using vesalius morphological operations
+#'
+#' @examples
+#' # Create simple circular territories
+#' coords <- circular_map(n_cells = 1000, n_territories = 3, expanse = c(0.1, 0.3))
+#'
+#' # Create layered circular territories
+#' coords <- circular_map(n_cells = 1000, n_territories = 2, expanse = c(0.2, 0.4), layers = 3)
+#'
 #' @importFrom vesalius build_vesalius_assay generate_tiles territory_morphing layer_territory
 circular_map <- function(n_cells = 6000,
     n_territories = 5,

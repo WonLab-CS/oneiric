@@ -1,14 +1,37 @@
 
-#' Create chaotic territoies
-#' @param n_cells int - number of cells to create
-#' @param expanse numeric -  max proportion of total width to use for
-#' territory expansion.
-#' @param layers int - number of layers in each rod territory
-#' @param chaos character - string specifying which chaos map to use
-
-#' @details Create a a territory using chaos mapping means that there
-#' be only one territory but it will have a chaotic shape. 
-#' @return coordinate data frame with barcodes, x, y, and Territories
+#' Create chaotic territories using strange attractors
+#'
+#' Generates spatial territories with chaotic, irregular shapes by mapping
+#' trajectories from strange attractors (such as the tinkerbell map) onto
+#' spatial coordinates. Creates complex, non-geometric territory boundaries.
+#'
+#' @param n_cells Integer specifying the number of cells to simulate
+#' @param expanse Numeric value specifying the expansion factor for territory
+#'   morphology as a proportion of spatial area (default: 0.1)
+#' @param chaos Character string specifying which chaotic map to use
+#'   (currently only "tinkerbell" is supported)
+#' @param layers Integer specifying the number of morphological layers to create
+#'   within the territory (default: 0 for no layers)
+#'
+#' @return Data frame with columns: barcodes, x, y, Territory
+#'
+#' @details
+#' The function creates chaotic territories by:
+#' 1. Randomly distributing cells in 2D space
+#' 2. Generating a trajectory using a strange attractor (tinkerbell map)
+#' 3. Mapping the chaotic trajectory onto spatial coordinates using nearest neighbors
+#' 4. Optionally expanding and layering the territory using vesalius morphological operations
+#'
+#' This creates territories with fractal-like, irregular boundaries that are
+#' biologically more realistic than simple geometric shapes.
+#'
+#' @examples
+#' # Create a simple chaotic territory
+#' coords <- chaos_map(n_cells = 1000, expanse = 0.2, chaos = "tinkerbell")
+#'
+#' # Create a layered chaotic territory
+#' coords <- chaos_map(n_cells = 1000, expanse = 0.3, chaos = "tinkerbell", layers = 3)
+#'
 #' @importFrom dplyr %>%
 #' @importFrom vesalius build_vesalius_assay generate_tiles territory_morphing layer_territory
 chaos_map <- function(n_cells = 6000,
@@ -71,6 +94,18 @@ chaos_map <- function(n_cells = 6000,
 
 
 #' @importFrom RANN nn2
+
+#' Apply tinkerbell chaotic map to spatial coordinates
+#'
+#' This internal function generates a chaotic territory pattern using the tinkerbell
+#' strange attractor and maps it onto spatial coordinates.
+#'
+#' @param coord Data frame containing spatial coordinates (barcodes, x, y, Territory)
+#' @param chaos Logical flag (unused parameter, kept for compatibility)
+#'
+#' @return Data frame with Territory column updated to reflect chaotic pattern
+#'
+#' @keywords internal
 tinkerbell_map <- function(coord, chaos = FALSE) {
     data(oneiric)
     params <- map_params[sample(seq(1,nrow(map_params)),1), ]
@@ -90,6 +125,22 @@ tinkerbell_map <- function(coord, chaos = FALSE) {
     return(coord)
 }
 
+#' Generate tinkerbell strange attractor trajectory
+#'
+#' This internal function simulates the tinkerbell strange attractor by iteratively
+#' applying the tinkerbell map equations to generate a chaotic trajectory.
+#'
+#' @param time Integer specifying the number of iterations to perform
+#' @param a Numeric parameter for the tinkerbell map equation
+#' @param b Numeric parameter for the tinkerbell map equation
+#' @param c Numeric parameter for the tinkerbell map equation
+#' @param d Numeric parameter for the tinkerbell map equation
+#' @param x_0 Numeric initial x-coordinate
+#' @param y_0 Numeric initial y-coordinate
+#'
+#' @return Data frame with 'x' and 'y' columns containing the trajectory coordinates
+#'
+#' @keywords internal
 tinkerbell <- function(time = 8000,
     a = 0.9,
     b = -0.6013,

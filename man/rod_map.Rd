@@ -2,7 +2,7 @@
 % Please edit documentation in R/rod_map.R
 \name{rod_map}
 \alias{rod_map}
-\title{Create Rod like territoies}
+\title{Create rod-like territories}
 \usage{
 rod_map(
   n_cells = 6000,
@@ -13,21 +13,43 @@ rod_map(
 )
 }
 \arguments{
-\item{n_cells}{int - number of cells to create}
+\item{n_cells}{Integer specifying the number of cells to simulate}
 
-\item{n_territories}{int -  max number of territories to generate}
+\item{n_territories}{Integer specifying the maximum number of rod territories to create}
 
-\item{layers}{int - number of layers in each rod territory}
+\item{width_range}{Numeric vector of length 2 specifying the minimum and maximum
+  rod width as proportions of total spatial area (default: c(0.0, 0.05))}
 
-\item{max_width}{numeric -  max proportion of total width to use as 
-rod width}
+\item{length_range}{Numeric vector of length 2 specifying the minimum and maximum
+  rod length as proportions of total spatial area (default: c(0.1, 0.5))}
 
-\item{max_length}{numeric - max proportion of total length to use as
-rod length}
+\item{layers}{Integer specifying the number of morphological layers to create
+  within each territory (default: 0 for no layers)}
 }
 \value{
-coordinate data frame with barcodes, x, y, and Territories
+Data frame with columns: barcodes, x, y, Territory
 }
 \description{
-Create Rod like territoies
+Generates spatial territories with elongated rod-like shapes by creating
+line segments of varying lengths and assigning cells within specified
+perpendicular distance ranges. Supports multi-layer territories using
+morphological operations.
+}
+\details{
+The function creates rod territories by:
+1. Randomly distributing cells in 2D space
+2. Selecting random starting points for rods
+3. Creating line segments of random length extending from start points
+4. Assigning cells within perpendicular distance ranges to form rod shapes
+5. Optionally creating layered territories using vesalius morphological operations
+}
+\examples{
+# Create simple rod territories
+coords <- rod_map(n_cells = 1000, n_territories = 3,
+                  width_range = c(0.01, 0.03), length_range = c(0.2, 0.4))
+
+# Create layered rod territories
+coords <- rod_map(n_cells = 1000, n_territories = 2,
+                  width_range = c(0.02, 0.04), length_range = c(0.3, 0.5),
+                  layers = 2)
 }

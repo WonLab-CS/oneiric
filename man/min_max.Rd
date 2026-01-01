@@ -2,16 +2,27 @@
 % Please edit documentation in R/utils.R
 \name{min_max}
 \alias{min_max}
-\title{min max normalisation}
+\title{Min-max normalization}
 \usage{
 min_max(x)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{Numeric vector to be normalized}
 }
 \value{
-min max nornalised vector
+Numeric vector with values scaled to the range [0, 1], or the original vector
+if all values are identical
 }
 \description{
-min max normalisation
+Performs min-max normalization on a numeric vector, scaling values to the range [0, 1].
+If all values are equal, returns the original vector unchanged and issues a warning.
+}
+\examples{
+# Basic usage
+x <- c(1, 5, 10, 3, 8)
+min_max(x)  # Returns: c(0.0, 0.444, 1.0, 0.222, 0.778)
+
+# Constant values
+x_const <- c(5, 5, 5)
+min_max(x_const)  # Returns: c(5, 5, 5) with warning
 }
