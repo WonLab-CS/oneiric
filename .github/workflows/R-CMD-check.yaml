@@ -28,10 +28,14 @@ jobs:
             "GenomeInfoDb",
             "edgeR",
             "DESeq2",
-            "Signac",
+            "splatter",
             "SingleCellExperiment",
             "SummarizedExperiment"
           ))
+        shell: Rscript {0}
+      - name: Install Signac
+        run: |
+          install.packages("Signac", repos = "https://cloud.r-project.org")
         shell: Rscript {0}
       - name: Install package dependencies
         env:
