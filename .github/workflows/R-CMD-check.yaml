@@ -22,6 +22,7 @@ jobs:
         run: |
           BiocManager::install(c(
             "S4Vectors",
+            "Rhtslib",
             "Rsamtools",
             "IRanges",
             "GenomicRanges",
