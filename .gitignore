@@ -1,2 +1,11 @@
 docs
+# Ignore all .DS_Store files
 .DS_Store
+**/.DS_Store
+
+
+# r stuff
+.Rprofile
+
+oneiric.Rcheck
+oneiric_0.0.1.tar.gz

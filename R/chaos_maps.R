@@ -108,21 +108,24 @@ chaos_map <- function(n_cells = 6000,
 #' @keywords internal
 #' @importFrom RANN nn2
 tinkerbell_map <- function(coord, chaos = FALSE) {
-    data(oneiric)
-    params <- map_params[sample(seq(1,nrow(map_params)),1), ]
-    tinker <- tinkerbell(time = 8000,
+    params <- map_params[sample.int(nrow(map_params), 1), ]
+    
+    tinker <- tinkerbell(
+        time = 8000,
         a = params[1],
         b = params[2],
         c = params[3],
         d = params[4],
         x_0 = params[5],
-        y_0 = params[6])
+        y_0 = params[6]
+    )
+    
     tinker$x <- min_max(tinker$x) * max(coord$x)
     tinker$y <- min_max(tinker$y) * max(coord$y)
-    knn <- RANN::nn2(coord[, c("x", "y")],
-        tinker,
-        k = 1)$nn.idx[, 1]
+    
+    knn <- RANN::nn2(coord[, c("x", "y")], tinker, k = 1)$nn.idx[, 1]
     coord$Territory[knn] <- 1
+    
     return(coord)
 }
 
@@ -159,6 +162,32 @@ tinkerbell <- function(time = 8000,
     return(data.frame(x, y))
 }
 
+#' Generate parameter sets for tinkerbell strange attractors
+#'
+#' This function generates multiple parameter combinations for tinkerbell strange
+#' attractors by randomly sampling parameter space within bounds that produce
+#' stable, interesting trajectories. Optionally plots and exports the results.
+#'
+#' @param time Integer specifying the maximum time in seconds to spend generating maps
+#' @param n_maps Integer specifying the target number of parameter sets to generate
+#' @param plot Logical indicating whether to create PDF plots of the attractors
+#' @param export Logical indicating whether to save the parameter sets to CSV
+#' @param file_name Character string for the output file name (without extension)
+#'
+#' @return A matrix with columns for the six tinkerbell parameters (a, b, c, d, x_0, y_0)
+#'   and one row per generated parameter set
+#'
+#' @details
+#' The function generates tinkerbell parameters by:
+#' 1. Randomly sampling parameter values within reasonable bounds
+#' 2. Testing each parameter set for stability (no NaN values)
+#' 3. Filtering for attractors that stay within reasonable coordinate bounds
+#' 4. Optionally visualizing and saving the results
+#'
+#' @examples
+#' # Generate 10 parameter sets without plotting
+#' params <- find_tinkerbell(time = 10, n_maps = 10, plot = FALSE)
+#'
 #' @export
 find_tinkerbell <- function(time = 120,
     n_maps = 96,
@@ -184,7 +213,7 @@ find_tinkerbell <- function(time = 120,
         d <- runif(1, -5, 5)
         x_0 <- runif(1, -5, 5)
         y_0 <- runif(1, -5, 5)
-        tinker <- oneiric:::tinkerbell(time = 6000,
+        tinker <- tinkerbell(time = 6000,
             a = a,b=b,c=c,d=d,x_0=x_0,y_0=y_0)
         if (any(is.na(tinker$x)) || any(is.na(tinker$y))) {
             next

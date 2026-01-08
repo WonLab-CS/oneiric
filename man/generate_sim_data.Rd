@@ -2,20 +2,30 @@
 % Please edit documentation in R/generate_simulated_data.R
 \name{generate_sim_data}
 \alias{generate_sim_data}
-\title{Function to generate data for simuation analysis.}
+\title{Generate simulated data for analysis}
 \usage{
 generate_sim_data(output, seed = 1453, run_mem = FALSE, simple = FALSE)
 }
 \arguments{
-\item{output}{path to directory where files will be added}
+\item{output}{Character string specifying the path to the output directory}
 
-\item{seed}{seed for consitent generation}
+\item{seed}{Integer seed for consistent data generation}
+
+\item{run_mem}{Logical indicating whether to run memory-intensive computational benchmarks}
+
+\item{simple}{Logical indicating whether to generate simplified test datasets}
 }
 \description{
-Function to generate data for simuation analysis.
+This function generates simulated spatial transcriptomics datasets for
+benchmarking spatial mapping tools. It creates multiple simulation scenarios
+with different cell type compositions and territory patterns.
 }
 \details{
-The only purpose of this function is to output the data used
-in the the manuscript. All parameters are set internally to force
-to use these paremeters and these parameters only
+This function generates various simulated datasets including:
+- Random territory patterns with one or two cell types per territory
+- Circular territories with varying cell numbers (when run_mem = TRUE)
+- Layered territories with differential expression patterns
+
+The function is primarily designed to reproduce the simulation scenarios
+used in the original manuscript.
 }

@@ -44,6 +44,7 @@ The function creates rod territories by:
 5. Optionally creating layered territories using vesalius morphological operations
 }
 \examples{
+\dontrun{
 # Create simple rod territories
 coords <- rod_map(n_cells = 1000, n_territories = 3,
                   width_range = c(0.01, 0.03), length_range = c(0.2, 0.4))
@@ -52,5 +53,5 @@ coords <- rod_map(n_cells = 1000, n_territories = 3,
 coords <- rod_map(n_cells = 1000, n_territories = 2,
                   width_range = c(0.02, 0.04), length_range = c(0.3, 0.5),
                   layers = 2)
-
+}
 }

@@ -4,7 +4,7 @@ Title: oneiric - simualting spatial data
 Version: 0.0.1
 Author: Patrick C.N. Martin
 Maintainer: Patrick C.N. Martin <patrick.martin@cshs.org>
-Description: Creating simulated data sets for benchmarking spatial mapping tools
+Description: Creating simulated data sets for benchmarking spatial mapping tools.
 License: GPL-3 + file LICENSE
 Collate: simulate.R
   circular_map.R
@@ -15,23 +15,30 @@ Collate: simulate.R
   viz.R
   contact_deg.R
   generate_simulated_data.R
+  global_bindings.R
 Depends: R (>= 4.0.0)
 Imports:
   grDevices,
-  ggplot2,
   dplyr,
   vesalius,
   splatter,
   RANN,
   SingleCellExperiment,
   SummarizedExperiment,
-  deldir
+  deldir,
+  methods
 Suggests:
   knitr,
   RUnit,
+  ggplot2,
+  RColorBrewer,
   rmarkdown,
   testthat (>= 3.0.0)
+Remotes: 
+    WonLab-CS/Vesalius
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr
+BuildResaveData: yes

@@ -18,27 +18,30 @@ simulate_spatial(
 )
 }
 \arguments{
-\item{n_cells}{int - number of cells to include in siluated data}
+\item{n_cells}{Integer specifying the number of cells to simulate}
 
-\item{n_territories}{int - number of territories to create}
+\item{n_territories}{Integer specifying the number of territories to create}
 
-\item{n_samples}{int - number of samples to generate}
+\item{n_samples}{Integer specifying the number of samples to generate}
 
-\item{pattern}{character - string defining the type of territories to 
-generate ("circle", "rod", "chaos")}
+\item{pattern}{Character string defining the type of territories to
+generate ("circle", "rod", "chaos", or "random")}
 
-\item{border}{logical - should border cells have specific gene expression?}
+\item{expanse}{Numeric vector of length 2 specifying the minimum and maximum
+expansion proportions for circular and chaotic territories}
 
-\item{layers}{int - number of layers in a territory}
+\item{width_range}{Numeric vector of length 2 specifying the minimum and maximum
+rod widths as proportions of spatial area}
 
-\item{max_expanse}{numeric - expansion proportion for circular and chaotic
-territories as a proportion of max size (1000 "pixels")}
+\item{length_range}{Numeric vector of length 2 specifying the minimum and maximum
+rod lengths as proportions of spatial area}
 
-\item{max_width}{numeric - max width of rod territories as a proportion of
-max size (1000 "pixels")}
+\item{border}{Logical indicating whether border cells should have specific gene expression}
 
-\item{max_length}{numeric - max length of rod territories as a proportion of
-max size (1000 "pixels")}
+\item{layers}{Integer specifying the number of morphological layers within each territory}
+
+\item{force_cells}{Integer specifying the minimum number of cells required per territory
+(0 means no minimum enforced)}
 }
 \description{
 Create spatial territories

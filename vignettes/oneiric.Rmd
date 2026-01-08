@@ -25,7 +25,6 @@ We wrapped our simulation in an R package - Oneiric - to faciliate to reproducib
 
 ```{r setup, eval = TRUE, echo = TRUE}
 library(oneiric)
-library(scater)
 library(ggplot2)
 library(RColorBrewer)
 set.seed(288)
@@ -54,12 +53,6 @@ map_params <- find_tinkerbell(time = 120,
     file_name = "maps")
 ```
 
-## Preparing output directory
-
-```{r out_dir, eval = TRUE, echo = TRUE}
-
-output <- "Oneiric/simulations/"
-```
 
 
 ## Territory Types
@@ -73,25 +66,25 @@ We have four territory types you can create:
 
 
 ```{r spatial_sim, eval = TRUE, echo = TRUE}
-circle <- simulate_spatial(n_cells = 5000,
+circle <- simulate_spatial(n_cells = 1000,
     n_territories = 5,
     n_samples = 12,
     pattern = "circle",
     expanse = c(0.1, 0.3))
 
-rod <- simulate_spatial(n_cells = 5000,
+rod <- simulate_spatial(n_cells = 1000,
     n_territories = 5,
     n_samples = 12,
     pattern = "rod",
     width_range = c(0.0, 0.1),
     length_range = c(0.2, 0.5))
 
-chaos_map <- simulate_spatial(n_cells = 5000,
+chaos_map <- simulate_spatial(n_cells = 1000,
     n_samples = 12,
     pattern = "chaos",
     expanse = 0.02) 
 
-random_map <- simulate_spatial(n_cells = 5000,
+random_map <- simulate_spatial(n_cells = 1000,
     n_territories = 5,
     n_samples = 12,
     pattern = "random",
@@ -105,7 +98,7 @@ random_map <- simulate_spatial(n_cells = 5000,
 ```{r view_territory_types, eval = TRUE, echo = TRUE}
 circles <- do.call("rbind", circle)
 circles$Territory <- as.factor(circles$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
@@ -118,7 +111,7 @@ g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
 
 rods <- do.call("rbind", rod)
 rods$Territory <- as.factor(rods$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(rods$Territory)))
 g1 <- ggplot(rods, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
@@ -131,7 +124,7 @@ g1 <- ggplot(rods, aes(x = x, y = y, col = Territory)) +
 
 tinker <- do.call("rbind", chaos_map)
 tinker$Territory <- as.factor(tinker$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(tinker$Territory)))
 g2 <- ggplot(tinker, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
@@ -144,7 +137,7 @@ g2 <- ggplot(tinker, aes(x = x, y = y, col = Territory)) +
 
 random <- do.call("rbind", random_map)
 random$Territory <- as.factor(random$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(random$Territory)))
 g3 <- ggplot(random, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.5) +
@@ -180,7 +173,7 @@ Once you have created the territories you like, you can add counts to these terr
 
 ```{r circle_solo, eval = TRUE, echo = TRUE}
 
-circular <- simulate_spatial(n_cells = 5000, 
+circular <- simulate_spatial(n_cells = 1000, 
     n_territories = 5, 
     n_samples = 12, 
     pattern = "circle", 
@@ -193,7 +186,7 @@ circular_counts <- simulate_cells(circular,
 
 circles <- do.call("rbind", circular_counts$spatial)
 circles$Territory <- as.factor(circles$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.75) +
@@ -206,7 +199,7 @@ g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
 
 
 circles$cell_labels <- as.factor(circles$cell_labels)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$cell_labels)))
 g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
     geom_point(size = 0.75) +
@@ -230,7 +223,7 @@ In case you would like to export:
 ```{r export_circle, eval = FALSE, echo =TRUE}
 export_simulation(spatial = circular_counts$spatial,
     cells = circular_counts$counts,
-    out_dir = output,
+    out_dir = "Oneiric/simulations/",
     file_tag = "circle_spatial_territories")
 
 ```
@@ -238,8 +231,11 @@ export_simulation(spatial = circular_counts$spatial,
 
 ## Simuating Layer regime
 
+Adding layers to your territories. Each territory will have a different cell type composition.
+However, the difference will be lower than between territories (defined by `de_layer`). 
+
 ```{r circle_layer_nl, eval = TRUE, echo = TRUE}
-circular_layer_nl <- simulate_spatial(n_cells = 5000,
+circular_layer_nl <- simulate_spatial(n_cells = 1000,
     n_territories = 1,
     n_samples = 12,
     pattern = "circle",
@@ -257,7 +253,7 @@ circular_layer_counts_nl <- simulate_cells(circular_layer_nl,
 
 circles <- do.call("rbind", circular_layer_counts_nl$spatial)
 circles$Territory <- as.factor(circles$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.75) +
@@ -269,7 +265,7 @@ g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
 
 
 circles$cell_labels <- as.factor(circles$cell_labels)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$cell_labels)))
 g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
     geom_point(size = 0.75) +
@@ -295,15 +291,15 @@ In case you would like to export:
 ```{r export_layer, eval = FALSE, echo = TRUE}
 export_simulation(spatial = circular_layer_counts_nl$spatial,
     cells = circular_layer_counts_nl$counts,
-    out_dir = output,
+    out_dir = "Oneiric/simulations/",
     file_tag = "layered_spatial_territories")
 ```
 
 
-## Simuating Layer regime with dropped cells
+## Simuating dropped cells
 
 ```{r circle_layer_rnd, eval = TRUE, echo = TRUE}
-circular_layer_rnd <- simulate_spatial(n_cells = 5000,
+circular_layer_rnd <- simulate_spatial(n_cells = 1000,
     n_territories = 2,
     n_samples = 12,
     pattern = "circle",
@@ -322,7 +318,7 @@ circular_layer_counts_rnd <- simulate_cells(circular_layer_rnd,
 
 circles <- do.call("rbind", circular_layer_counts_rnd$spatial)
 circles$Territory <- as.factor(circles$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.75) +
@@ -334,7 +330,7 @@ g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
 
 
 circles$cell_labels <- as.factor(circles$cell_labels)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$cell_labels)))
 g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
     geom_point(size = 0.75) +
@@ -360,14 +356,14 @@ In case you would like to export:
 ```{r export_rnd, eval = FALSE, echo = TRUE}
 export_simulation(spatial = circular_layer_counts_rnd$spatial,
     cells = circular_layer_counts_rnd$counts,
-    out_dir = output,
+    out_dir = "Oneiric/simulations/",
     file_tag = "dropped_spatial_territories")
 ```
 
 ## Simulating full random data sets 
 
 ```{r random_layer_rnd, eval = TRUE, echo = TRUE}
-circular_layer_rnd <- simulate_spatial(n_cells = 5000,
+circular_layer_rnd <- simulate_spatial(n_cells = 1000,
     n_territories = 3,
     n_samples = 12,
     pattern = "random",
@@ -388,7 +384,7 @@ circular_layer_counts_rnd <- simulate_cells(circular_layer_rnd,
 
 circles <- do.call("rbind", circular_layer_counts_rnd$spatial)
 circles$Territory <- as.factor(circles$Territory)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$Territory)))
 g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
     geom_point(size = 0.75) +
@@ -400,7 +396,7 @@ g <- ggplot(circles, aes(x = x, y = y, col = Territory)) +
 
 
 circles$cell_labels <- as.factor(circles$cell_labels)
-cols <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+cols <- colorRampPalette(brewer.pal(11, "Spectral"))
 cols <- cols(length(levels(circles$cell_labels)))
 g1 <- ggplot(circles, aes(x = x, y = y, col = cell_labels)) +
     geom_point(size = 0.75) +

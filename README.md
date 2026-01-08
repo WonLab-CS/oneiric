@@ -1,3 +1,5 @@
+![R-CMD-check](https://github.com/WonLab-CS/oneiric/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)
+
 # oneiric
 
 Simulated Spatial Transcriptomic data.
@@ -48,10 +50,9 @@ If you only wish to generate the data sets used in the [Vesalius](https://www.bi
 library(ggplot2)
 library(RColorBrewer)
 library(oneric)
-library(scater)
 
-
-output <- "/path to output/"
+# USE THIS SEED TO REPRODUCE THE DATA SETS USED IN PAPER
+output <- "/path/to/output/"
 seed <- 1453
 
 generate_sim_data(output = output,
@@ -61,8 +62,6 @@ generate_sim_data(output = output,
     simple = TRUE)
 ```
 
-## TO DO
+## Gen AI Disclaimer
 
-1. Refector code for clarity
-2. Add extensive function documentation
-3. Add unit tests
+Manual pages were refined/generated using Grok Code. Unit tests were generated using Grok Code.

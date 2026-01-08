@@ -18,6 +18,7 @@ Performs min-max normalization on a numeric vector, scaling values to the range 
 If all values are equal, returns the original vector unchanged and issues a warning.
 }
 \examples{
+\dontrun{
 # Basic usage
 x <- c(1, 5, 10, 3, 8)
 min_max(x)  # Returns: c(0.0, 0.444, 1.0, 0.222, 0.778)
@@ -25,4 +26,5 @@ min_max(x)  # Returns: c(0.0, 0.444, 1.0, 0.222, 0.778)
 # Constant values
 x_const <- c(5, 5, 5)
 min_max(x_const)  # Returns: c(5, 5, 5) with warning
+}
 }

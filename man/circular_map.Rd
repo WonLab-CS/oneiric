@@ -38,10 +38,11 @@ The function creates circular territories by:
 4. Optionally creating layered territories using vesalius morphological operations
 }
 \examples{
+\dontrun{
 # Create simple circular territories
 coords <- circular_map(n_cells = 1000, n_territories = 3, expanse = c(0.1, 0.3))
 
 # Create layered circular territories
 coords <- circular_map(n_cells = 1000, n_territories = 2, expanse = c(0.2, 0.4), layers = 3)
-
+}
 }

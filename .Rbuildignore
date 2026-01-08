@@ -1,3 +1,11 @@
 ^_pkgdown\.yml$
 ^docs$
+^doc$
 ^pkgdown$
+^oneiric\.Rcheck$
+^oneiric_0\.0\.1\.tar\.gz$
+^\.git$
+^\.github$
+^flake\.nix$
+^flake\.lock$
+^rebuild\.R$

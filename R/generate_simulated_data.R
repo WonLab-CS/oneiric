@@ -1,9 +1,23 @@
-#' Function to generate data for simuation analysis. 
-#' @param output path to directory where files will be added
-#' @param seed seed for consitent generation
-#' @details The only purpose of this function is to output the data used
-#' in the the manuscript. All parameters are set internally to force
-#' to use these paremeters and these parameters only
+#' Generate simulated data for analysis
+#'
+#' This function generates simulated spatial transcriptomics datasets for
+#' benchmarking spatial mapping tools. It creates multiple simulation scenarios
+#' with different cell type compositions and territory patterns.
+#'
+#' @param output Character string specifying the path to the output directory
+#' @param seed Integer seed for consistent data generation
+#' @param run_mem Logical indicating whether to run memory-intensive computational benchmarks
+#' @param simple Logical indicating whether to generate simplified test datasets
+#'
+#' @details
+#' This function generates various simulated datasets including:
+#' - Random territory patterns with one or two cell types per territory
+#' - Circular territories with varying cell numbers (when run_mem = TRUE)
+#' - Layered territories with differential expression patterns
+#'
+#' The function is primarily designed to reproduce the simulation scenarios
+#' used in the original manuscript.
+#'
 #' @export
 generate_sim_data <- function(output,
     seed = 1453,
@@ -23,7 +37,7 @@ generate_sim_data <- function(output,
         expanse = c(0.15, 0.3),
         width_range = c(0, 0.3),
         length_range = c(0.15,0.3),
-        layer = seq(0,4),
+        layers = seq(0,4),
         force_cells = 5)
     #-------------------------------------------------------------------------#
     # Add only one 1 cell per territory
@@ -103,7 +117,7 @@ generate_sim_data <- function(output,
             n_samples = 12,
             pattern = "circle",
             expanse = c(0.4, 0.5),
-            layer = 5,
+            layers = 5,
             force_cells = 12)
         circular_layer <- simulate_cells(circular_layer,
             de_prob = 0.5,
@@ -122,7 +136,7 @@ generate_sim_data <- function(output,
             n_samples = 12,
             pattern = "circle",
             expanse = c(0.15, 0.3),
-            layer = 4,
+            layers = 4,
             force_cells = 5)
         circular_dropped <- simulate_cells(circular_dropped,
             de_prob = 0.5,

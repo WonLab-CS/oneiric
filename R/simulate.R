@@ -88,8 +88,8 @@ simulate_cells <- function(spatial,
     } else {
         layers <- sapply(spatial, comment)
     }
-    n_layers <- oneiric:::get_layers(layers)
-    spatial <- oneiric:::generate_cell_labels(spatial,cell_composition, randomize_cells)
+    n_layers <- get_layers(layers)
+    spatial <- generate_cell_labels(spatial,cell_composition, randomize_cells)
     n_cells <- table(spatial$cell_labels)
     total_cells <- nrow(spatial)
     params <- splatter::newSplatParams(batchCells = total_cells, nGenes = n_genes)

@@ -46,9 +46,9 @@ export_simulation <- function(spatial,
         if (is.null(file_tag)){
             file_tag <- "simulated_territories"
         }
-        file_name <- paste0(out_dir, file_tag, "_spatial_coordinates_sample_", i,".csv")
+        file_name <- file.path(out_dir, paste0(file_tag, "_spatial_coordinates_sample_", i,".csv"))
         write.csv(spatial[[i]], file = file_name, quote = FALSE, row.names = FALSE)
-        file_name <- paste0(out_dir, file_tag, "_gene_counts_sample_", i, ".csv")
+        file_name <- file.path(out_dir, paste0(file_tag, "_gene_counts_sample_", i, ".csv"))
         cell_tmp <- data.frame("genes" = rownames(cells[[i]]), cells[[i]])
         write.csv(cell_tmp, file = file_name, quote = FALSE, row.names = TRUE)
     }, spatial = spatial,

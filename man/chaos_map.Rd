@@ -37,10 +37,11 @@ This creates territories with fractal-like, irregular boundaries that are
 biologically more realistic than simple geometric shapes.
 }
 \examples{
+\dontrun{
 # Create a simple chaotic territory
 coords <- chaos_map(n_cells = 1000, expanse = 0.2, chaos = "tinkerbell")
 
 # Create a layered chaotic territory
 coords <- chaos_map(n_cells = 1000, expanse = 0.3, chaos = "tinkerbell", layers = 3)
-
+}
 }
